@@ -2,21 +2,23 @@
 <head>
     <script src="./src/d3.js"></script>
     <script src="./src/d3-annotation.js"></script>
-    <script src="./vis.js"></script>
+    <script src="./src/vis.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://github.com/joshuaray/Narrative-Visualization/blob/main/data/data.csv?raw=true" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
+    <div id="intro">intro</div>
+    <div id="conclusion">conclusion</div>
     <div id="content">
         <div id="vis-container">
-            <canvas id="vis"></canvas>
+            <div id="vis"></div>
         </div>
         <div id="sidebar-container">
             <div id="controls" class="sidebar-content">
                 <p>Controls</p>
-
             </div>
             <div id="description" class="sidebar-content">
                 <p>Description</p>
@@ -27,8 +29,7 @@
         <div id="previous">
             <button onClick="changeStep(-1)">Previous</button>
         </div>
-        <div id="slide-progress">
-        </div>
+        <div id="slide-progress"></div>
         <div id="next">
             <button onClick="changeStep(1)">Next</button>
         </div>
