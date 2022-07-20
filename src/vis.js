@@ -99,48 +99,60 @@ var colorlegend = (colors = [], min, max, title) => {
         });
 
     var g = svg.append('g').attr('fill','white');
-    var container = g.append('rect');
-
     g.append('rect')
         .attr('width', '20')
         .attr('height', 200)
         .attr('stroke', 'black')
         .attr('fill', 'url(#grad)')
-        .attr('transform', 'rotate(90)')
-        .attr('y', (width() + margin.left + margin.right / 2) * -1)
-        .attr('x', height() + margin.bottom)
+        .attr('x', (width() + margin.left + margin.right / 2))
+        .attr('y', margin.top)
         .attr('opacity', 0)
         .transition()
-        .delay(animationDelay * 2)
+        .delay(animationDelay * 5)
         .attr('opacity', 1);
     
     g.append('text')
         .attr('class', 'colorlegend-text colorlegend-min')
         .text(min)
-        .attr('x', width() + margin.right + margin.left / 2)
-        .attr('y', height() + margin.bottom + margin.top - 15)
+        .attr('x', width() + margin.right / 2 + margin.left - 2.5)
+        .attr('y', margin.top - 5)
         .style('font-weight', 'bold')
         .style('font-size', '8pt')
-        .attr('fill','black');
+        .attr('fill','black')
+        .attr('opacity', 0)
+        .transition()
+        .delay(animationDelay * 5)
+        .attr('opacity', 1);
         
     g.append('text')
         .attr('class', 'colorlegend-text colorlegend-max')
         .text(max)
-        .attr('x', width() + margin.right - margin.right)
-        .attr('y', height() + margin.bottom + margin.top - 15)
+        .attr('x', width() + margin.right / 2 + margin.left - 2.5)
+        .attr('y', margin.top + 215)
         .style('font-weight', 'bold')
         .style('font-size', '8pt')
-        .attr('fill','black');
+        .attr('fill','black')
+        .attr('opacity', 0)
+        .transition()
+        .delay(animationDelay * 5)
+        .attr('opacity', 1);
     
     g.append('text')
         .attr('class', 'colorlegend-title')
         .text(title)
         .attr('text-anchor', 'middle')
-        .attr('x', width() + margin.right)
-        .attr('y', height() + margin.bottom - 10)
+        .attr('transform', 'rotate(90)')
+        .attr('y', (width() + margin.right + margin.left - 25) * -1)
+        .attr('x', margin.bottom - 10)
+        .style('width', '100%')
+        .style('height', 'auto')
         .style('font-weight', 'bold')
-        .style('font-size', '8pt')
-        .attr('fill','black');
+        .style('font-size', '.8em')
+        .attr('fill','black')
+        .attr('opacity', 0)
+        .transition()
+        .delay(animationDelay * 5)
+        .attr('opacity', 1);
 }
 
 var scatterplot = (data, title, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radiusKey, colormin = 0, colormax = 0, colortitle = '', colorfunc = (x) => 0) => {
