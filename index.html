@@ -7,10 +7,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://github.com/joshuaray/Narrative-Visualization/blob/main/data/data.csv?raw=true" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-    <div id="intro">intro</div>
+    <div id="intro">
+        <div id="intro-content"></div>
+        <div id="about">
+            <h1>About the Data</h1>
+            <p></p>
+            <div class="flex"></div>
+            <button class="external" onclick="window.open('https://data.world/ofili/tmdb-movie-data','_blank')">
+                <span class="material-icons">open_in_new</span>
+                <span>Download source data from data.world</span>
+            </button>
+        </div>
+    </div>
     <div id="conclusion">conclusion</div>
     <div id="content">
         <div id="vis-container">

@@ -37,7 +37,7 @@ var labels = (x, y, title) => {
     svg.append('text')
         .attr('class', 'axis-label')
         .attr('text-anchor', 'middle')
-        .attr('y', 15)
+        .attr('y', margin.left / 4)
         .attr('x', height() / 2 * -1)
         .attr('dy', '12px')
         .attr('transform', 'rotate(-90)')
