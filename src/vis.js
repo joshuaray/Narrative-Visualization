@@ -27,8 +27,10 @@ var getSvg = () => {
     return svg;
 }
 
-var scatterplot = (data, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey) => {
+var scatterplot = (data, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radiusKey, colormin = 0, colormax = 0, colorfunc = (x) => 0) => {
     var svg = getSvg();
+    xmax = xmax * 1.05;
+    ymax = ymax * 1.05;
 
     var x = d3.scaleLinear()
         .domain([xmin, xmax])
@@ -43,6 +45,8 @@ var scatterplot = (data, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey) => {
     svg.append('g')
         .call(d3.axisLeft(y));
 
+    var color = d3.scaleLinear().domain([colormin, colormax]).range(["white", "blue"]);
+
     svg.append('g')
         .selectAll('dot')
         .data(data)
@@ -50,8 +54,10 @@ var scatterplot = (data, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey) => {
         .append('circle')
             .attr('cx', function(d) { return x(d[xkey]) })
             .attr('cy', function(d) { return y(d[ykey]) })
-            .attr('r', 1.5)
-            .style('fill', 'blue');
+            .attr('r', function(d) { return 1 + (radiusKey == null ? 0 : Number(d[radiusKey])) })
+            .style('stroke', 'black')
+            .style('stroke-width', 1)
+            .style('fill', function(d) { return color(colorfunc(d)) });
 }
 
 var barchart = () => {

@@ -34,7 +34,10 @@ var steps = [
         content: {
             x: 'Budget (Inflation Adjusted)',
             y: 'Earnings (Inflation Adjusted)',
-            func: (self) => scatterplot(data, 0, max(data, self.x), 0, max(data, self.y), self.x, self.y)
+            size: 'Popularity',
+            color: (row) => row['Release Year'].substring(0,3),
+            data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
+            func: (self) => scatterplot(self.data(self, data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 195, 201, self.color)
         }
     },
     {
