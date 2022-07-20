@@ -25,7 +25,7 @@ var steps = [
         name: 'Introduction',
         description: '',
         content: {
-            func: (self) => intro()
+            func: (self, data) => intro()
         }
     },
     {
@@ -37,36 +37,37 @@ var steps = [
             size: 'Popularity',
             color: (row) => row['Release Year'].substring(0,3),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
-            func: (self) => scatterplot(self.data(self, data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 195, 201, self.color)
+            func: (self, data) => scatterplot(self.data(self, data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 195, 201, self.color)
         }
     },
     {
         name: 'Step 2',
         description: '',
         content: {
-            func: (self) => barchart()
+            color: (row) => null,
+            func: (self, data) => barchart(data)
         }
     },
     {
         name: 'Step 3',
         description: '',
         content: {
-            func: (self) => barchart()
+            color: (row) => null,
+            func: (self, data) => barchart(data)
         }
     },
     {
         name: 'Conclusion',
         description: '',
         content: {
-            func: (self) => conclusion()
+            func: (self, data) => conclusion()
         }
     }
 ];
 
 generate = async (content) => {
     get(function(data) {
-        window.data = data;
-        content.func(content);
+        content.func(content, data);
     });
 };
 

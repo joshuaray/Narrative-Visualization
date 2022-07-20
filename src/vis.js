@@ -60,6 +60,8 @@ var scatterplot = (data, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radiusKey, 
             .style('fill', function(d) { return color(colorfunc(d)) });
 }
 
-var barchart = () => {
+var barchart = (data) => {
     var svg = getSvg();
+
+
 }
