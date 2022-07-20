@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<head>
+    <script src="./src/d3.js"></script>
+    <script src="./src/d3-annotation.js"></script>
+    <script src="./vis.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+    <div id="content">
+        <div id="vis-container">
+            <canvas id="vis"></canvas>
+        </div>
+        <div id="sidebar-container">
+            <div id="controls" class="sidebar-content">
+                <p>Controls</p>
+
+            </div>
+            <div id="description" class="sidebar-content">
+                <p>Description</p>
+            </div>
+        </div>
+    </div>
+    <div id="toolbar">
+        <div id="previous">
+            <button onClick="changeStep(-1)">Previous</button>
+        </div>
+        <div id="slide-progress">
+        </div>
+        <div id="next">
+            <button onClick="changeStep(1)">Next</button>
+        </div>
+    </div>
+    <div id="footer">
+        <p>UIUC | CS498 - Data Visualization</p>
+        <p>Joshua Ray</p>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>
