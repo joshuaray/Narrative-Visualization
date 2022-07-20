@@ -191,7 +191,14 @@ button {
 
 svg, g {
     color: black;
+    background: linear-gradient(180deg, white, #a8a8ff);
 }
+    g.tick > text {
+        font-size: 0.9em;
+    }
+    g > text.axis-label {
+        font-weight: bold;
+    }
 
 #intro, #conclusion {
     height: calc(100% - 100px);
