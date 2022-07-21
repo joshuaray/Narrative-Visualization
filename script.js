@@ -63,8 +63,9 @@ var steps = [
             size: 'Popularity',
             title: (data) => 'Budget, Revenue, and Popularity of Box Office Releases Between ' + min(data, 'Release Year') + ' and ' + max(data, 'Release Year'),
             color: (row) => row['Release Year'].substring(0,3) + '0',
+            colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
-            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, min(data, 'Release Year').toString().substring(0, 3) + '0', max(data, 'Release Year').toString().substring(0, 3) + '0', 'Release Decade', self.color)
+            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, min(data, 'Release Year').toString().substring(0, 3) + '0', max(data, 'Release Year').toString().substring(0, 3) + '0', 'Release Decade', self.colorbuckets(data), self.color)
         }
     },
     {

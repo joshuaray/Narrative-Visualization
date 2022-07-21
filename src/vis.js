@@ -88,15 +88,15 @@ var colorlegend = (colors = [], min, max, title) => {
         .attr('x2', '0%')
         .attr('y1', '0%')
         .attr('y2', '100%');
-
-    grad.selectAll('stop')
-        .data(colors)
-        .enter()
-        .append('stop')
-        .style('stop-color', function(d){ return d; })
-        .attr('offset', function(d,i){
-            return 100 * (i / (colors.length - 1)) + '%';
-        });
+    
+    colors.forEach((c, i) => {
+        var stop = grad.append('stop');
+        stop.style('stop-color', c)
+            .attr('offset', 100 * (i / (colors.length)) + '%');
+        var stop2 = grad.append('stop');
+        stop2.style('stop-color', c)
+            .attr('offset', 100 * ((i == 0 ? 1 : i + 1) / (colors.length)) - 1 + '%')
+    });
 
     var g = svg.append('g').attr('fill','white');
     g.append('rect')
@@ -155,7 +155,7 @@ var colorlegend = (colors = [], min, max, title) => {
             .attr('opacity', 1);
 }
 
-var scatterplot = (data, title, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radiusKey, colormin = 0, colormax = 0, colortitle = '', colorfunc = (x) => 0) => {
+var scatterplot = (data, title, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radiusKey, colormin = 0, colormax = 0, colortitle = '', colorbuckets, colorfunc = (x) => 0) => {
     var svg = getSvg();
     xmax = xmax * 1.05;
     ymax = ymax * 1.05;
@@ -197,7 +197,7 @@ var scatterplot = (data, title, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radi
                 .attr('r', (d) => 1 + (radiusKey == null ? 0 : Number(d[radiusKey])));
 
     labels(xkey, ykey, title);
-    colorlegend(colors, colormin, colormax, colortitle);
+    colorlegend(colorbuckets.map(c => color(c)), colormin, colormax, colortitle);
 }
 
 var barchart = (data) => {
