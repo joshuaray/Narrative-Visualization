@@ -45,9 +45,9 @@ var labels = (x, y, title) => {
         .style('font-size', '.8em')
         .attr('opacity', startingOpacity)
         .transition()
-        .delay(animationDelay)
-        .attr('opacity', 1)
-        .style('font-size', '1em');
+            .delay(animationDelay)
+            .attr('opacity', 1)
+            .style('font-size', '1em');
     
     svg.append('text')
         .attr('class', 'axis-label')
@@ -59,9 +59,9 @@ var labels = (x, y, title) => {
         .style('font-size', '.8em')
         .attr('opacity', startingOpacity)
         .transition()
-        .delay(animationDelay)
-        .attr('opacity', 1)
-        .style('font-size', '1em');
+            .delay(animationDelay)
+            .attr('opacity', 1)
+            .style('font-size', '1em');
 
     svg.append('text')
         .attr('class', 'title')
@@ -75,8 +75,8 @@ var labels = (x, y, title) => {
         .text(title)
         .attr('opacity', 0)
         .transition()
-        .delay(animationDelay)
-        .attr('opacity', 1);
+            .delay(animationDelay)
+            .attr('opacity', 1);
 }
 
 var colorlegend = (colors = [], min, max, title) => {
@@ -108,8 +108,8 @@ var colorlegend = (colors = [], min, max, title) => {
         .attr('y', margin.top)
         .attr('opacity', 0)
         .transition()
-        .delay(animationDelay * 5)
-        .attr('opacity', 1);
+            .delay(animationDelay * 5)
+            .attr('opacity', 1);
     
     g.append('text')
         .attr('class', 'colorlegend-text colorlegend-min')
@@ -121,8 +121,8 @@ var colorlegend = (colors = [], min, max, title) => {
         .attr('fill','black')
         .attr('opacity', 0)
         .transition()
-        .delay(animationDelay * 5)
-        .attr('opacity', 1);
+            .delay(animationDelay * 5)
+            .attr('opacity', 1);
         
     g.append('text')
         .attr('class', 'colorlegend-text colorlegend-max')
@@ -134,8 +134,8 @@ var colorlegend = (colors = [], min, max, title) => {
         .attr('fill','black')
         .attr('opacity', 0)
         .transition()
-        .delay(animationDelay * 5)
-        .attr('opacity', 1);
+            .delay(animationDelay * 5)
+            .attr('opacity', 1);
     
     g.append('text')
         .attr('class', 'colorlegend-title')
@@ -151,8 +151,8 @@ var colorlegend = (colors = [], min, max, title) => {
         .attr('fill','black')
         .attr('opacity', 0)
         .transition()
-        .delay(animationDelay * 5)
-        .attr('opacity', 1);
+            .delay(animationDelay * 5)
+            .attr('opacity', 1);
 }
 
 var scatterplot = (data, title, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radiusKey, colormin = 0, colormax = 0, colortitle = '', colorfunc = (x) => 0) => {
@@ -190,11 +190,11 @@ var scatterplot = (data, title, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radi
             .style('opacity', 0.1)
             .style('fill', (d) => color(colorfunc(d)))
             .transition()
-            .delay((d, i) => 250 + 30 * d[radiusKey])
-            .style('opacity', 1)
+                .delay((d, i) => 250 + 30 * d[radiusKey])
+                .style('opacity', 1)
             .transition()
-            .delay((d, i) => 100 + 30 * d[radiusKey])
-            .attr('r', (d) => 1 + (radiusKey == null ? 0 : Number(d[radiusKey])));
+                .delay((d, i) => 100 + 30 * d[radiusKey])
+                .attr('r', (d) => 1 + (radiusKey == null ? 0 : Number(d[radiusKey])));
 
     labels(xkey, ykey, title);
     colorlegend(colors, colormin, colormax, colortitle);

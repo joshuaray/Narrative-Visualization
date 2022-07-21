@@ -3,6 +3,7 @@
     <script src="./src/d3.js"></script>
     <script src="./src/d3-annotation.js"></script>
     <script src="./src/vis.js"></script>
+    <script src="./src/filter.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://github.com/joshuaray/Narrative-Visualization/blob/main/data/data.csv?raw=true" crossorigin>
@@ -12,11 +13,12 @@
 </head>
 <body>
     <div id="intro">
-        <div id="intro-content">
+        <div id="intro-content" class="overlay">
+            <h1><span class="material-icons">query_stats</span>Narrative Visualization</h1>
             <p>talk about martini glass and brief description of slides</p>
         </div>
         <div id="about">
-            <h1><span class="material-icons">query_stats</span>About the Data</h1>
+            <h1><span class="material-icons">insights</span>About the Data</h1>
             <p>The data used for this narrative, sourced from TMDb (The Movie Database), includes detailed information for over 10,000 movies released from 1960 to 2015. Movie information ranges from metadata such as director, genre(s), and web address to statistical information such as its popularity index, total box office revenue, and budget. All monetary values have been provided in USD and include adjustments for inflation. See below for a sample row from the data, in addition to descriptions of each of the provided fields.</p>
             <h2>Data Sample</h2>
             <table>
@@ -162,10 +164,14 @@
         </div>
         <div id="sidebar-container">
             <div id="controls" class="sidebar-content">
-                <p>Controls</p>
+                <h3>Filters</h3>
             </div>
             <div id="description" class="sidebar-content">
-                <p>Description</p>
+                <h3>Description</h3>
+                <p></p>
+            </div>
+            <div id="properties" class="sidebar-content">
+                <h3>Chart Properties</h3>
             </div>
         </div>
     </div>
