@@ -223,6 +223,7 @@ svg, g {
     transition: all 250ms ease;
     left: -100%;
     display: flex;
+    overflow-y: scroll;
 }
 
     #intro.overlay {
@@ -234,14 +235,21 @@ svg, g {
     }
 
 #intro, #intro-content, #about {
-    flex-direction: row;
+    flex-direction: column;
     flex: 1 1 auto;
 }
 
     #intro-content {
-        flex-basis: 25%;
         display: flex;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 10px;
+        background: rgb(40,43,59);
+        box-shadow: 0px 0px 2px #000000f0;
+        color: white;
+        border: 1px solid rgb(46,49,57);
         flex-direction: column;
+        padding: 25px;
     }
 
     #about {
@@ -281,3 +289,38 @@ svg, g {
     opacity: 0;
     transition: all .3s ease;
 }
+
+table {
+    padding-left: 50px;
+    padding-right: 50px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px #161616;
+    margin-bottom: 25px;
+    border-collapse: collapse;
+}
+
+    thead {
+        background: rgba(0,0,0,0.4);
+    }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th:first-of-type {
+            border-top-left-radius: 10px;
+        }
+        
+        th:last-of-type {
+            border-top-right-radius: 10px;;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(0,0,0,0.2);
+        }
+
+        td {
+            font-size: 12px;
+        }

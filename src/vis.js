@@ -143,7 +143,7 @@ var colorlegend = (colors = [], min, max, title) => {
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(90)')
         .attr('y', (width() + margin.right + margin.left - 25) * -1)
-        .attr('x', margin.bottom - 10)
+        .attr('x', margin.top * 2)
         .style('width', '100%')
         .style('height', 'auto')
         .style('font-weight', 'bold')
