@@ -21,134 +21,13 @@
             <h1><span class="material-icons">insights</span>About the Data</h1>
             <p>The data used for this narrative, sourced from TMDb (The Movie Database), includes detailed information for over 10,000 movies released from 1960 to 2015. Movie information ranges from metadata such as director, genre(s), and web address to statistical information such as its popularity index, total box office revenue, and budget. All monetary values have been provided in USD and include adjustments for inflation. See below for a sample row from the data, in addition to descriptions of each of the provided fields.</p>
             <h2>Data Sample</h2>
-            <table>
+            <table id="data-sample">
                 <thead>
                     <th style="width: 25%">Field</th>
                     <th style="width: 35%">Value</th>
                     <th style="width: 40%">Field Description</th>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>ID</td>
-                        <td>11</td>
-                        <td>Unique row identifier, used as primary key of data set.</td>
-                    </tr>
-                    <tr>
-                        <td>IMDB ID</td>
-                        <td>tt0076759</td>
-                        <td>Primary key of movie within IMDB, the original source of the data.</td>
-                    </tr>
-                    <tr>
-                        <td>Popularity</td>
-                        <td>12.037933</td>
-                        <td>Popularity index of the movie. As of 2015, Jurassic World had the highest popularity index of movies released since 1960, with a value of 32.985763.</td>
-                    </tr>
-                    <tr>
-                        <td>Budget ($)</td>
-                        <td>11,000,000</td>
-                        <td>Movie budget in USD, not adjusted for inflation.</td>
-                    </tr>
-                    <tr>
-                        <td>Revenue ($)</td>
-                        <td>775,398,007</td>
-                        <td>Box office revenue of the movie in USD, not adjusted for inflation.</td>
-                    </tr>
-                    <tr>
-                        <td>Title</td>
-                        <td>Star Wars</td>
-                        <td>Movie title</td>
-                    </tr>
-                    <tr>
-                        <td>Cast</td>
-                        <td>Mark Hamill|Harrison Ford|Carrie Fisher|Peter Cushing|Alec Guinness</td>
-                        <td>First and last names of the main cast of the movie, pipe delimited.</td>
-                    </tr>
-                    <tr>
-                        <td>URL</td>
-                        <td>http://www.starwars.com/films/star-wars-episode-iv-a-new-hope</td>
-                        <td>Web address of the movie.</td>
-                    </tr>
-                    <tr>
-                        <td>Director</td>
-                        <td>George Lucas</td>
-                        <td>First and last name of the movie director.</td>
-                    </tr>
-                    <tr>
-                        <td>Tagline</td>
-                        <td>A long time ago in a galaxy far, far away...</td>
-                        <td>Advertising slogan of the movie.</td>
-                    </tr>
-                    <tr>
-                        <td>Keywords</td>
-                        <td>android|galaxy|hermit|death star|lightsaber</td>
-                        <td>Pipe delimited list of common words associated with the content or plot of the movie.</td>
-                    </tr>
-                    <tr>
-                        <td>Overview</td>
-                        <td>Princess Leia is captured and held hostage by the evil Imperial forces in their effort to take over the galactic Empire. Venturesome Luke Skywalker and dashing captain Han Solo team together with the loveable robot duo R2-D2 and C-3PO to rescue the beautiful princess and restore peace and justice in the Empire.</td>
-                        <td>Plot description of the movie.</td>
-                    </tr>
-                    <tr>
-                        <td>Runtime (Minutes)</td>
-                        <td>121</td>
-                        <td>Length of the cinematic release in minutes.</td>
-                    </tr>
-                    <tr>
-                        <td>Genres</td>
-                        <td>Adventure|Action|Science Fiction</td>
-                        <td>Pipe delimited list of genres applicable to the movie.</td>
-                    </tr>
-                    <tr>
-                        <td>Production Company</td>
-                        <td>Lucasfilm</td>
-                        <td>Name of the primary production company of the movie.</td>
-                    </tr>
-                    <tr>
-                        <td>Release Date</td>
-                        <td>3/20/1977</td>
-                        <td>Original US cinematic release date of the movie, mm/dd/yyyy formatted.</td>
-                    </tr>
-                    <tr>
-                        <td>Rating Count</td>
-                        <td>4,428</td>
-                        <td>Number of IMDB critic ratings.</td>
-                    </tr>
-                    <tr>
-                        <td>Rating Average</td>
-                        <td>7.9</td>
-                        <td>Average critic rating of the movie, rated on a 10 point scale.</td>
-                    </tr>
-                    <tr>
-                        <td>Release Year</td>
-                        <td>1977</td>
-                        <td>Year of the original cinematic release.</td>
-                    </tr>
-                    <tr>
-                        <td>Inflation Multiplier</td>
-                        <td>3.597781033</td>
-                        <td>Multiplier required to adjust original monetary values (budget and revenue) to 2015.</td>
-                    </tr>
-                    <tr>
-                        <td>Budget (Inflation Adjusted)</td>
-                        <td>39,575,591.36</td>
-                        <td>Budget of the movie in USD, adjusted for inflation.</td>
-                    </tr>
-                    <tr>
-                        <td>Revenue (Inflation Adjusted)</td>
-                        <td>2,789,712,242</td>
-                        <td>Box office revenue of the movie in USD, adjusted for inflation.</td>
-                    </tr>
-                    <tr>
-                        <td>Return on Investment (Inflation Adjusted)</td>
-                        <td>70.49072791</td>
-                        <td>How many times the movie made its budget back in revenue, adjusted for inflation. Used to determine box office profitability of the movie.</td>
-                    </tr>
-                    <tr>
-                        <td>Earnings (Inflation Adjusted)</td>
-                        <td>2,750,136,651</td>
-                        <td>Net profit of the movie in USD, adjusted for inflation.</td>
-                    </tr>
-                </tbody>
+                <tbody></tbody>
             </table>
             <div class="flex"></div>
             <button class="external" onclick="window.open('https://data.world/ofili/tmdb-movie-data','_blank')">

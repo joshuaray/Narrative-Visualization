@@ -1,3 +1,5 @@
+const sample_title = 'Star Wars';
+
 var min = (data, key) => {
     return Math.min(...data.map(o => isNaN(Number(o[key])) ? 0 : Number(o[key])));
 }
@@ -18,6 +20,33 @@ var conclusion = () => {
     container.classList.add('overlay');
     document.getElementById('intro').classList.remove('overlay');
 }
+
+var dictionary = [
+    {name: 'ID', description: 'Unique row identifier, used as primary key of data set.'},
+    {name: 'IMDB ID', description: 'Primary key of movie within IMDB, the original source of the data.'},
+    {name: 'Popularity', description: 'Popularity index of the movie. As of 2015, Jurassic World had the highest popularity index of movies released since 1960, with a value of 32.985763.'},
+    {name: 'Budget ($)', description: 'Movie budget in USD, not adjusted for inflation.'},
+    {name: 'Revenue ($)', description: 'Box office revenue of the movie in USD, not adjusted for inflation.'},
+    {name: 'Title', description: 'Movie title'},
+    {name: 'Cast', description: 'First and last names of the main cast of the movie, pipe delimited.'},
+    {name: 'URL', description: 'Web address of the movie.'},
+    {name: 'Director', description: 'First and last name of the movie director.'},
+    {name: 'Tagline', description: 'Advertising slogan of the movie.'},
+    {name: 'Keywords', description: 'Pipe delimited list of common words associated with the content or plot of the movie.'},
+    {name: 'Overview', description: 'Plot description of the movie.'},
+    {name: 'Runtime (Minutes)', description: 'Length of the cinematic release in minutes.'},
+    {name: 'Genres', description: 'Pipe delimited list of genres applicable to the movie.'},
+    {name: 'Production Company', description: 'Name of the primary production company of the movie.'},
+    {name: 'Release Date', description: 'Original US cinematic release date of the movie, mm/dd/yyyy formatted.'},
+    {name: 'Rating Count', description: 'Number of IMDB critic ratings.'},
+    {name: 'Rating Average', description: 'Average critic rating of the movie, rated on a 10 point scale.'},
+    {name: 'Release Year', description: 'Year of the original cinematic release.'},
+    {name: 'Inflation Multiplier', description: 'Multiplier required to adjust original monetary values (budget and revenue) to 2015.'},
+    {name: 'Budget (Inflation Adjusted)', description: 'Budget of the movie in USD, adjusted for inflation.'},
+    {name: 'Revenue (Inflation Adjusted)', description: 'Box office revenue of the movie in USD, adjusted for inflation.'},
+    {name: 'Return on Investment (Inflation Adjusted)', description: 'How many times the movie made its budget back in revenue, adjusted for inflation. Used to determine box office profitability of the movie.'},
+    {name: 'Earnings (Inflation Adjusted)', description: 'Net profit of the movie in USD, adjusted for inflation.'},
+];
 
 var currentStep = 0;
 var steps = [
@@ -65,7 +94,7 @@ var steps = [
             color: (row) => row['Release Year'].substring(0,3) + '0',
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
-            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, min(data, 'Release Year').toString().substring(0, 3) + '0', max(data, 'Release Year').toString().substring(0, 3) + '0', 'Release Decade', self.colorbuckets(data), self.color)
+            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 'Release Decade', self.colorbuckets(data), self.color)
         }
     },
     {
@@ -187,6 +216,26 @@ var setup = () => {
         i.appendChild(p);
         container.appendChild(i);
     });
+
+    var table = document.getElementById('data-sample');
+    var body = table.querySelector('tbody');
+    get(function(data) {
+        var item = data.find(d => d['Title'] == sample_title);
+        dictionary.forEach(field => {
+            var row = document.createElement('tr');
+            var name = document.createElement('td');
+            var value = document.createElement('td');
+            var desc = document.createElement('td');
+            name.textContent = field.name;
+            value.textContent = item[field.name];
+            desc.textContent = field.description;
+            row.appendChild(name);
+            row.appendChild(value);
+            row.appendChild(desc);
+            body.appendChild(row);
+        });
+    });
+
     changeStep(0);
 }
 

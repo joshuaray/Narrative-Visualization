@@ -155,13 +155,13 @@ var colorlegend = (colors = [], min, max, title) => {
             .attr('opacity', 1);
 }
 
-var scatterplot = (data, title, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radiusKey, colormin = 0, colormax = 0, colortitle = '', colorbuckets, colorfunc = (x) => 0) => {
+var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', ykey = '', radiusKey = '', colortitle = '', colorbuckets = [], colorfunc = (x) => 0) => {
     var svg = getSvg();
     xmax = xmax * 1.05;
     ymax = ymax * 1.05;
 
     var colors = ['white','blue'];
-    var color = d3.scaleLinear().domain([colormin, colormax]).range(colors);
+    var color = d3.scaleLinear().domain([colorbuckets[0], colorbuckets[colorbuckets.length - 1]]).range(colors);
     var x = d3.scaleLinear().domain([xmin, xmax]).range([0, width()]);
     var y = d3.scaleLinear().domain([ymin, ymax]).range([height(), 0]);
 
@@ -197,7 +197,7 @@ var scatterplot = (data, title, xmin = 0, xmax, ymin = 0, ymax, xkey, ykey, radi
                 .attr('r', (d) => 1 + (radiusKey == null ? 0 : Number(d[radiusKey])));
 
     labels(xkey, ykey, title);
-    colorlegend(colorbuckets.map(c => color(c)), colormin, colormax, colortitle);
+    colorlegend(colorbuckets.map(c => color(c)), colorbuckets[0], colorbuckets[colorbuckets.length - 1], colortitle);
 }
 
 var barchart = (data) => {
