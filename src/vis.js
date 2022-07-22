@@ -288,3 +288,130 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
     labels(xkey, heightkey, title);
     colorlegend(stackgroups.map((c,i) => color(i)), sortedcolors[0], sortedcolors[sortedcolors.length - 1], colortitle);
 }
+
+var stackedbar100 = (data, title = '', columngroups = [], stackgroups = [], yname = '', xkey = '', ymin = 0, ymax, colortitle = '', heightfunc = (data, column, group) => 0, columnfunc = (row, column) => false, groupfunc = (row, group) => false) => {
+    var svg = getSvg();
+
+    stackgroups = stackgroups.sort((a,b) => a - b);
+
+    var color = d3.scaleLinear()
+        .domain([0, stackgroups.length - 1])
+        .range(['orange', 'blue']);
+
+    var stacks = columngroups.map(col => {
+        return data.filter(d => columnfunc(d, col))
+            .flatMap(d => stackgroups
+                .filter(s => groupfunc(d, s))
+                    .map(group => {
+                        return {groupindex: stackgroups.indexOf(group), group: group, columnindex: columngroups.indexOf(col), column: col, value: 0};
+                    }) 
+        )
+    });
+
+    var columnOrder = stacks.flatMap(s => s.map(x => x.columnindex)
+        .filter((v, i, a) => a.indexOf(v) == i)
+        .map(x => { 
+            return { 
+                columnindex: x, 
+                column: stacks[x][0].column, 
+                value: stacks[x].map(z => z.value).reduce((a,b) => a + b) } 
+            })).sort((a, b) => -1 * (a.value - b.value)).map(m => m.column);
+
+    stacks = stacks.map(s => s.map(x => x.groupindex + '|' + x.columnindex)
+        .filter((v, i, a) => a.indexOf(v) == i)
+        .map(x => { 
+            var column = stacks[x.split('|')[1]].find(y => y.groupindex == x.split('|')[0]).column;
+            var group = stacks[x.split('|')[1]].find(y => y.groupindex == x.split('|')[0]).group;
+            return { 
+                groupindex: x.split('|')[0], 
+                columnindex: columnOrder.indexOf(stacks[x.split('|')[1]].find(y => y.groupindex == x.split('|')[0]).column), 
+                group: group, 
+                column: column, 
+                value: heightfunc(data, column, group)
+            } 
+            })).sort((a, b) => -1 * (a.map(z => z.value).reduce((x,y) => x + y, 0) - b.map(z => z.value).reduce((x,y) => x + y, 0)));
+
+    var x = d3.scaleBand().domain(columnOrder).range([0, width()]).padding([0.2]);
+    var y = d3.scaleLinear().domain([ymin, ymax]).range([height(), 0]);
+        
+    svg.append('g').attr('class', 'x-axis')
+        .attr('text-anchor', 'start')
+        .attr('transform', 'translate(0,' + height() + ')')
+        .call(d3.axisBottom(x))
+        .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 50).attr('opacity', 1))
+        .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(100).attr('stroke-opacity', 1));
+
+    svg.append('g')
+        .call(d3.axisLeft(y))
+        .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 75).attr('opacity', 1))
+        .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(100).attr('stroke-opacity', 1));
+
+    var groups = stacks.flatMap(s => s.map(t => t.group)).filter((a,i,v) => v.indexOf(a) == i);
+    var columns = stacks.flatMap(s => s.map(t => t.column)).filter((a,i,v) => v.indexOf(a) == i)
+        .map(c => { return { column: c, columnindex: stacks.flatMap(s => s.find(t => t.column == c)).filter(x => x != undefined)[0].columnindex}});
+    var chartData = columns.map(c => {
+        var _ = {column: c.column, columnindex: c.columnindex};
+        groups.forEach(g => {
+            var val = stacks.flatMap(s => s.filter(t => t.column == c.column && t.group == g));
+            if (val != null && val.length > 0)
+                _[g] = val[0].value;
+            else 
+                _[g] = 0;
+        });
+        return _;
+    });
+
+    var stackGen = d3.stack().keys(groups);
+    var series = stackGen(chartData);
+
+    svg.append('g')
+        .selectAll('g')
+        .data(series)
+        .enter()
+        .append('g')
+            .selectAll()
+            .data((d) => d)
+            .enter()
+            .append('rect')
+            .attr('fill', (d, i) => { 
+                var group = 0;
+                group = Object.entries(d.data).find(f => f[1] == d[1] - d[0]);
+                if (group == null) {
+                    group = Object.entries(d.data).find(f => f[1] == d[0]);
+                    if (group == null) {
+                        group = Object.entries(d.data).find(f => Math.floor(f[1]*100000) == Math.floor((d[1] - d[0])*100000));
+                    }
+                } 
+                return color(stackgroups.indexOf(Number(group[0])));
+            })
+            .attr('group', (d, i) => { 
+                var group = 0;
+                group = Object.entries(d.data).find(f => f[1] == d[1] - d[0]);
+                if (group == null) {
+                    group = Object.entries(d.data).find(f => f[1] == d[0]);
+                    if (group == null) {
+                        group = Object.entries(d.data).find(f => Math.floor(f[1]*100000) == Math.floor((d[1] - d[0])*100000));
+                    }
+                } 
+                return group[0];
+            })
+            .attr('x', (d) => x(d.data.column))
+            .attr('y', (d) => y(ymax))
+            .attr('height', (d, i) => (y(d[0]) - y(d[1])) * .1)
+            .attr('opacity', 0)
+            .attr('width', x.bandwidth())
+            .transition()
+                 .delay((d, i) => 75 * i + (y(d[0]) - y(d[1])) * .1)
+                 .attr('opacity', 1)
+                 .attr('y', (d) => y(d[1]))
+                 .attr('height', (d, i) => (y(d[0]) - y(d[1])));
+
+    svg.select('.x-axis')
+        .selectAll('text')
+        .attr('text-anchor', 'start')
+        .attr('transform', 'rotate(45)');
+
+    var sortedcolors = stackgroups.sort((a,b) => a - b);
+    labels(xkey, yname, title);
+    colorlegend(stackgroups.map((c,i) => color(i)), sortedcolors[0], sortedcolors[sortedcolors.length - 1], colortitle);
+}

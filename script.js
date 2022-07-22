@@ -138,6 +138,57 @@ var steps = [
     },
     {
         name: 'Step 3',
+        description: 'TODO',
+        properties: [
+            {
+                name: 'X Axis',
+                value: 'Genre',
+                description: 'Most relevant genre of the movie.',
+                class: 'east'
+            },
+            {
+                name: 'Y Axis',
+                value: 'Percentage of Total',
+                description: 'By genre, what percentage of total inflation adjusted revenue is attributed to each decade.',
+                class: 'north'
+            },
+            {
+                name: 'Color',
+                value: 'Release Decade',
+                description: 'Decades in the source data set range from the 1960s to the 2010s.',
+                class: 'palette'
+            }
+        ],
+        content: {
+            title: (data) => 'Genre Revenue Ratios by Decade',
+            yname: 'Percentage of Genre Revenue',
+            stackkey: 'Release Year',
+            columnkey: 'Genres',
+            columngroups: (self, data) => data.flatMap(d => d[self.columnkey].split('|')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != ''),
+            stackgroups: (self, data) => data.flatMap(d => Number(d[self.stackkey].substring(0, 3) + '0')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != '').sort(a => a),
+            ymax: (self, data) => 100,
+            groupfunc: (row, group) => Number(row['Release Year'].substring(0,3) + '0') == group,
+            columnfunc: (row, column) => row['Genres'].includes(column),
+            heightfunc: (data, column, group) => { 
+                var columnValue = data.filter(d => Number(d['Release Year'].substring(0,3)+'0') == group)
+                    .filter(d => d['Genres'].includes(column))
+                    .map(d => Number(d['Revenue (Inflation Adjusted)']))
+                    .filter(d => d > 0)
+                    .reduce((a,b) => a + b, 0);
+
+                var totalValue = data.filter(d => d['Genres'].includes(column))
+                    .map(d => Number(d['Revenue (Inflation Adjusted)']))
+                    .filter(d => d > 0)
+                    .reduce((a,b) => a + b, 0);
+
+                return columnValue / totalValue * 100
+            },
+            data: (self, data) => data.filter(d => Number(d['Revenue (Inflation Adjusted)']) > 0 && Number(d['Revenue (Inflation Adjusted)'] > 0)),
+            func: (self, data) => stackedbar100(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.yname, 'Genre', 0, self.ymax(self, data), 'Release Decade', self.heightfunc, self.columnfunc, self.groupfunc)
+        }
+    },
+    {
+        name: 'Step 4',
         description: '',
         content: {
             color: (row) => null,
