@@ -269,7 +269,7 @@ var setup = () => {
         });
     });
 
-    changeStep(2);
+    changeStep(0);
 }
 
 setup();

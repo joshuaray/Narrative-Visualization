@@ -174,8 +174,8 @@ var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', 
 
     svg.append('g')
         .call(d3.axisLeft(y))
-        .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 200).attr('opacity', 1))
-        .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(1000).attr('stroke-opacity', 1));
+        .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 100).attr('opacity', 1))
+        .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(500).attr('stroke-opacity', 1));
 
     svg.append('g')
         .selectAll('dot')
@@ -210,9 +210,6 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
         .domain([0, stackgroups.length - 1])
         .range(['orange', 'blue']);
 
-        console.log(columngroups);
-        console.log(stackgroups);
-
     var stacks = columngroups.map(col => {
         return data.filter(d => columnfunc(d, col))
             .flatMap(d => stackgroups
@@ -245,15 +242,18 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
 
     var x = d3.scaleBand().domain(columnOrder).range([0, width()]).padding([0.2]);
     var y = d3.scaleLinear().domain([ymin, ymax]).range([height(), 0]);
-
-    svg.append('g')
-        .attr('class', 'x-axis')
+        
+    svg.append('g').attr('class', 'x-axis')
         .attr('text-anchor', 'start')
         .attr('transform', 'translate(0,' + height() + ')')
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x))
+        .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 50).attr('opacity', 1))
+        .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(100).attr('stroke-opacity', 1));
 
     svg.append('g')
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y))
+        .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 75).attr('opacity', 1))
+        .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(100).attr('stroke-opacity', 1));
 
     yfunc = (row) => stacks[row.columnindex].filter(s => s.groupindex < row.groupindex).map(s => s.value).reduce((a,b) => a + b, 0);
 
@@ -269,17 +269,24 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
             .attr('fill', (d) => color(d.groupindex))
             .attr('group', (d) => d.group)
             .attr('x', (d) => x(d.column))
-            .attr('y', (d) => y(yfunc(d) + d.value))
-            .attr('height', (d) => y(yfunc(d)) - (y(d.value + yfunc(d))))
-            .attr('width', x.bandwidth());
+            .attr('y', (d) => -1 * y(yfunc(d) + d.value) + y(yfunc(d) + d.value) * 0.01)
+            .attr('opacity', 0)
+            .attr('width', x.bandwidth())
+            .attr('height', (d) => y(0))
+            .transition()
+                .delay((d, i) => 150 * i)
+                .attr('opacity', 1)
+                .attr('y', (d) => y(yfunc(d) + d.value))
+                .attr('height', (d) => y(yfunc(d)) - (y(d.value + yfunc(d))));
+                // .transition()
+                //     .delay(100)
+                //     .attr('opacity', 1);
 
     svg.select('.x-axis')
         .selectAll('text')
         .attr('text-anchor', 'start')
         .attr('transform', 'rotate(45)');
 
-    console.log(stacks);
-        
     var sortedcolors = stackgroups.sort((a,b) => a - b);
     labels(xkey, heightkey, title);
     colorlegend(stackgroups.map((c,i) => color(i)), sortedcolors[0], sortedcolors[sortedcolors.length - 1], colortitle);
