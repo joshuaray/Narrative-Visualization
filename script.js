@@ -99,7 +99,27 @@ var steps = [
     },
     {
         name: 'Step 2',
-        description: '',
+        description: 'TODO',
+        properties: [
+            {
+                name: 'X Axis',
+                value: 'Genre',
+                description: 'Most relevant genre of the movie.',
+                class: 'east'
+            },
+            {
+                name: 'Y Axis',
+                value: 'Revenue (Inflation Adjusted)',
+                description: 'Total revenue of movies released for the genre in USD, adjusted for inflation to normalize values to 2015.',
+                class: 'north'
+            },
+            {
+                name: 'Color',
+                value: 'Release Decade',
+                description: 'Decades in the source data set range from the 1960s to the 2010s.',
+                class: 'palette'
+            }
+        ],
         content: {
             title: (data) => 'Inflation Adjusted Revenue by Genre and Release Decade',
             heightkey: 'Revenue (Inflation Adjusted)',
@@ -189,6 +209,7 @@ changeProperties = (description = '', properties = [{name: '', description: '', 
 }
 
 var changeStep = async (modifier) => {
+    destroy();
     currentStep += modifier;
     if (currentStep < 0)
         currentStep = steps.length - 1;
