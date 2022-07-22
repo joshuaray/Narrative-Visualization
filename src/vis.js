@@ -269,18 +269,15 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
             .attr('fill', (d) => color(d.groupindex))
             .attr('group', (d) => d.group)
             .attr('x', (d) => x(d.column))
-            .attr('y', (d) => -1 * y(yfunc(d) + d.value) + y(yfunc(d) + d.value) * 0.01)
+            .attr('y', (d) => -1 * y(ymax))
             .attr('opacity', 0)
             .attr('width', x.bandwidth())
-            .attr('height', (d) => y(0))
+            .attr('height', (d) => (y(yfunc(d)) - (y(d.value + yfunc(d)))) * 2)
             .transition()
-                .delay((d, i) => 150 * i)
+                .delay((d, i) => 150 * i + (stackgroups.length - d.groupindex) * 20)
                 .attr('opacity', 1)
                 .attr('y', (d) => y(yfunc(d) + d.value))
                 .attr('height', (d) => y(yfunc(d)) - (y(d.value + yfunc(d))));
-                // .transition()
-                //     .delay(100)
-                //     .attr('opacity', 1);
 
     svg.select('.x-axis')
         .selectAll('text')
