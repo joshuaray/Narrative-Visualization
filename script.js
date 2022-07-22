@@ -101,8 +101,19 @@ var steps = [
         name: 'Step 2',
         description: '',
         content: {
-            color: (row) => null,
-            func: (self, data) => barchart(data)
+            title: (data) => 'Inflation Adjusted Revenue by Genre and Release Decade',
+            heightkey: 'Revenue (Inflation Adjusted)',
+            stackkey: 'Release Year',
+            columnkey: 'Genres',
+            columngroups: (self, data) => data.flatMap(d => d[self.columnkey].split('|')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != ''),
+            stackgroups: (self, data) => data.flatMap(d => Number(d[self.stackkey].substring(0, 3) + '0')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != '').sort(a => a),
+            ymax: (self, data) => Math.round(Number(self.columngroups(self, data).map(g => {
+                return data.filter(d => d[self.columnkey].includes(g)).map(d => d[self.heightkey]).map(d => parseFloat(d)).reduce((a,b)=>Number(a)+Number(b))
+            }).sort((a, b) => a < b)[0]) / 1000000000) * 1000000000,
+            groupfunc: (row, group) => Number(row['Release Year'].substring(0,3) + '0') == group,
+            columnfunc: (row, column) => row['Genres'].includes(column),
+            data: (self, data) => data.filter(d => Number(d[self.heightkey]) > 0 && Number(d[self.heightkey] > 0)),
+            func: (self, data) => stackedbar(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.heightkey, 'Genre', 0, self.ymax(self, data), 'Release Decade', self.columnfunc, self.groupfunc)
         }
     },
     {
@@ -124,6 +135,7 @@ var steps = [
 
 generate = async (content) => {
     get(function(data) {
+        window.data = data;
         content.func(content, data);
     });
 };
@@ -236,7 +248,7 @@ var setup = () => {
         });
     });
 
-    changeStep(0);
+    changeStep(2);
 }
 
 setup();
