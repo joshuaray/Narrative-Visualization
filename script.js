@@ -192,7 +192,7 @@ var steps = [
         description: '',
         content: {
             color: (row) => null,
-            func: (self, data) => barchart(data)
+            func: (self, data) => stackedbar(data)
         }
     },
     {

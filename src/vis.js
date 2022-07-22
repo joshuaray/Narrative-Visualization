@@ -374,27 +374,10 @@ var stackedbar100 = (data, title = '', columngroups = [], stackgroups = [], ynam
             .enter()
             .append('rect')
             .attr('fill', (d, i) => { 
-                var group = 0;
-                group = Object.entries(d.data).find(f => f[1] == d[1] - d[0]);
-                if (group == null) {
-                    group = Object.entries(d.data).find(f => f[1] == d[0]);
-                    if (group == null) {
-                        group = Object.entries(d.data).find(f => Math.floor(f[1]*100000) == Math.floor((d[1] - d[0])*100000));
-                    }
-                } 
+                var group = Object.entries(d.data).find(f => Math.floor(f[1]*100000) == Math.floor((d[1] - d[0])*100000));
                 return color(stackgroups.indexOf(Number(group[0])));
             })
-            .attr('group', (d, i) => { 
-                var group = 0;
-                group = Object.entries(d.data).find(f => f[1] == d[1] - d[0]);
-                if (group == null) {
-                    group = Object.entries(d.data).find(f => f[1] == d[0]);
-                    if (group == null) {
-                        group = Object.entries(d.data).find(f => Math.floor(f[1]*100000) == Math.floor((d[1] - d[0])*100000));
-                    }
-                } 
-                return group[0];
-            })
+            .attr('group', (d, i) => Object.entries(d.data).find(f => Math.floor(f[1]*100000) == Math.floor((d[1] - d[0])*100000)[0]))
             .attr('x', (d) => x(d.data.column))
             .attr('y', (d) => y(ymax))
             .attr('height', (d, i) => (y(d[0]) - y(d[1])) * .1)
