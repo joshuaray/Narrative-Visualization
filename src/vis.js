@@ -255,7 +255,7 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
         .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 75).attr('opacity', 1))
         .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(100).attr('stroke-opacity', 1));
 
-    yfunc = (row) => stacks[row.columnindex].filter(s => s.groupindex < row.groupindex).map(s => s.value).reduce((a,b) => a + b, 0);
+    yfunc = (row) => stacks[row.columnindex].filter(s => s.groupindex > row.groupindex).map(s => s.value).reduce((a,b) => a + b, 0);
 
     svg.append('g')
         .selectAll('g')
