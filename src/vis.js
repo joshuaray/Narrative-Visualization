@@ -155,12 +155,12 @@ var colorlegend = (colors = [], min, max, title) => {
             .attr('opacity', 1);
 }
 
-var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', ykey = '', radiusKey = '', colortitle = '', colorbuckets = [], colorfunc = (x) => 0) => {
+var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', ykey = '', radiusKey = '', colortitle = '', colorrange = ['white','blue'], colorbuckets = [], colorfunc = (x) => 0) => {
     var svg = getSvg();
     xmax = xmax * 1.05;
     ymax = ymax * 1.05;
 
-    var colors = ['white','blue'];
+    var colors = colorrange;
     var color = d3.scaleLinear().domain([colorbuckets[0], colorbuckets[colorbuckets.length - 1]]).range(colors);
     var x = d3.scaleLinear().domain([xmin, xmax]).range([0, width()]);
     var y = d3.scaleLinear().domain([ymin, ymax]).range([height(), 0]);
@@ -200,7 +200,7 @@ var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', 
     colorlegend(colorbuckets.map(c => color(c)), colorbuckets[0], colorbuckets[colorbuckets.length - 1], colortitle);
 }
 
-var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightkey = '', xkey = '', ymin = 0, ymax, colortitle = '', columnfunc = (row, column) => false, groupfunc = (row, group) => false) => {
+var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightkey = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['orange', 'blue'],  columnfunc = (row, column) => false, groupfunc = (row, group) => false) => {
     var svg = getSvg();
     ymax = ymax * 1.05;
 
@@ -208,7 +208,7 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
 
     var color = d3.scaleLinear()
         .domain([0, stackgroups.length - 1])
-        .range(['orange', 'blue']);
+        .range(colorrange);
 
     var stacks = columngroups.map(col => {
         return data.filter(d => columnfunc(d, col))
@@ -289,14 +289,14 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
     colorlegend(stackgroups.map((c,i) => color(i)), sortedcolors[0], sortedcolors[sortedcolors.length - 1], colortitle);
 }
 
-var stackedbar100 = (data, title = '', columngroups = [], stackgroups = [], yname = '', xkey = '', ymin = 0, ymax, colortitle = '', heightfunc = (data, column, group) => 0, columnfunc = (row, column) => false, groupfunc = (row, group) => false) => {
+var stackedcolumn100 = (data, title = '', columngroups = [], stackgroups = [], yname = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['yellow', 'brown'], heightfunc = (data, column, group) => 0, columnfunc = (row, column) => false, groupfunc = (row, group) => false, columnsortfunc = (data, column, group) => 0) => {
     var svg = getSvg();
 
     stackgroups = stackgroups.sort((a,b) => a - b);
 
     var color = d3.scaleLinear()
         .domain([0, stackgroups.length - 1])
-        .range(['orange', 'blue']);
+        .range(colorrange);
 
     var stacks = columngroups.map(col => {
         return data.filter(d => columnfunc(d, col))
@@ -312,10 +312,10 @@ var stackedbar100 = (data, title = '', columngroups = [], stackgroups = [], ynam
         .filter((v, i, a) => a.indexOf(v) == i)
         .map(x => { 
             return { 
-                columnindex: x, 
                 column: stacks[x][0].column, 
-                value: stacks[x].map(z => z.value).reduce((a,b) => a + b) } 
-            })).sort((a, b) => -1 * (a.value - b.value)).map(m => m.column);
+                value: columnsortfunc(data, stacks[x][0].column, stackgroups[stackgroups.length - 1])
+            };
+        })).sort((a, b) => a.value - b.value).map((x, i) => { return { columnindex: i, column: x.column, value: x.value}})
 
     stacks = stacks.map(s => s.map(x => x.groupindex + '|' + x.columnindex)
         .filter((v, i, a) => a.indexOf(v) == i)
@@ -324,14 +324,14 @@ var stackedbar100 = (data, title = '', columngroups = [], stackgroups = [], ynam
             var group = stacks[x.split('|')[1]].find(y => y.groupindex == x.split('|')[0]).group;
             return { 
                 groupindex: x.split('|')[0], 
-                columnindex: columnOrder.indexOf(stacks[x.split('|')[1]].find(y => y.groupindex == x.split('|')[0]).column), 
+                columnindex: columnOrder.findIndex(c => c.column == stacks[x.split('|')[1]].find(y => y.groupindex == x.split('|')[0]).column), 
                 group: group, 
                 column: column, 
                 value: heightfunc(data, column, group)
             } 
             })).sort((a, b) => -1 * (a.map(z => z.value).reduce((x,y) => x + y, 0) - b.map(z => z.value).reduce((x,y) => x + y, 0)));
 
-    var x = d3.scaleBand().domain(columnOrder).range([0, width()]).padding([0.2]);
+    var x = d3.scaleBand().domain(columnOrder.map(m => m.column)).range([0, width()]).padding([0.2]);
     var y = d3.scaleLinear().domain([ymin, ymax]).range([height(), 0]);
         
     svg.append('g').attr('class', 'x-axis')

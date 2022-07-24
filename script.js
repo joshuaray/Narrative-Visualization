@@ -94,7 +94,7 @@ var steps = [
             color: (row) => row['Release Year'].substring(0,3) + '0',
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
-            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 'Release Decade', self.colorbuckets(data), self.color)
+            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['white', 'blue'], self.colorbuckets(data), self.color)
         }
     },
     {
@@ -133,7 +133,7 @@ var steps = [
             groupfunc: (row, group) => Number(row['Release Year'].substring(0,3) + '0') == group,
             columnfunc: (row, column) => row['Genres'].includes(column),
             data: (self, data) => data.filter(d => Number(d[self.heightkey]) > 0 && Number(d[self.heightkey] > 0)),
-            func: (self, data) => stackedbar(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.heightkey, 'Genre', 0, self.ymax(self, data), 'Release Decade', self.columnfunc, self.groupfunc)
+            func: (self, data) => stackedbar(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.heightkey, 'Genre', 0, self.ymax(self, data), 'Release Decade', ['orange', 'blue'], self.columnfunc, self.groupfunc)
         }
     },
     {
@@ -160,7 +160,7 @@ var steps = [
             }
         ],
         content: {
-            title: (data) => 'Genre Revenue Ratios by Decade',
+            title: (data) => 'Genre Revenue Breakdown by Decade',
             yname: 'Percentage of Genre Revenue',
             stackkey: 'Release Year',
             columnkey: 'Genres',
@@ -183,16 +183,31 @@ var steps = [
 
                 return columnValue / totalValue * 100
             },
-            data: (self, data) => data.filter(d => Number(d['Revenue (Inflation Adjusted)']) > 0 && Number(d['Revenue (Inflation Adjusted)'] > 0)),
-            func: (self, data) => stackedbar100(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.yname, 'Genre', 0, self.ymax(self, data), 'Release Decade', self.heightfunc, self.columnfunc, self.groupfunc)
+            columnsortfunc: (data, column, group) => data.filter(f => f['Genres'].includes(column)).filter(f => f['Release Year'].substring(0,3) + '0' == group).map(z => Number(z['Revenue (Inflation Adjusted)'])).reduce((a,b) => a + b, 0),
+            data: (self, data) => data.filter(d => d['Has Financial Data']),
+            func: (self, data) => stackedcolumn100(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.yname, 'Genre', 0, self.ymax(self, data), 'Release Decade', ['yellow', 'brown'], self.heightfunc, self.columnfunc, self.groupfunc, self.columnsortfunc)
         }
     },
     {
         name: 'Step 4',
-        description: '',
+        filters: [
+            {
+                name: 'Revenue (Inflation Adjusted)',
+                min: (data) => min(data, 'Revenue (Inflation Adjusted)'),
+                max: (data) => max(data, 'Revenue (Inflation Adjusted)'),
+                filter: (data, min, max) => data.filter(d => d['Revenue (Inflation Adjusted)'] > min).filter(d => d['Revenue (Inflation Adjusted)'] < max),
+                func: (self, chart, data, onchange) => slider(chart, data, self.name, self.min(data), self.max(data), self.filter, onchange)
+            }
+        ],
         content: {
-            color: (row) => null,
-            func: (self, data) => stackedbar(data)
+            x: 'Budget (Inflation Adjusted)',
+            y: 'Revenue (Inflation Adjusted)',
+            size: 'Popularity',
+            title: (data) => 'Budget, Revenue, and Popularity of Box Office Releases Between ' + min(data, 'Release Year') + ' and ' + max(data, 'Release Year'),
+            color: (row) => row['Release Year'].substring(0,3) + '0',
+            colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
+            data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
+            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['blue', 'orange'], self.colorbuckets(data), self.color)
         }
     },
     {
@@ -204,23 +219,24 @@ var steps = [
     }
 ];
 
-generate = async (content) => {
-    get(function(data) {
-        window.data = data;
-        content.func(content, data);
-    });
-};
-
-setupFilters = (filters = [{type: '', name: '', values: [], filterKey: ''}]) => {
+setupFilters = (chart, data, filters = [], onchange = (chart, data) => {}) => {
     var container = document.getElementById('controls');
-    if (filters.filter(f => f.name != '').length == 0) {
+    if (filters.length == 0) {
         container.classList.add('hidden');
         return;
     }
     else 
         container.classList.remove('hidden');
-        console.log(filters);
+    filters.forEach(f => f.func(f, chart, data, onchange));
 }
+
+generate = async (chart) => {
+    get(function(data) {
+        window.data = data;
+        chart.content.func(chart.content, data);
+        setupFilters(chart, data, chart.filters, chart.content.func);
+    });
+};
 
 changeProperties = (description = '', properties = [{name: '', description: '', value: '', class: ''}]) => {
     var container_description = document.getElementById('description');
@@ -275,9 +291,8 @@ var changeStep = async (modifier) => {
         if (document.getElementsByClassName('overlay').length > 0)
             document.getElementsByClassName('overlay')[0].classList.remove('overlay');
 
-    setupFilters(steps[currentStep].filters);
     changeProperties(steps[currentStep].description, steps[currentStep].properties);
-    await generate(steps[currentStep].content);
+    await generate(steps[currentStep]);
 }
 
 var setup = () => {

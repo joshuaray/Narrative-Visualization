@@ -221,7 +221,7 @@ svg, g {
     color: black;
 }
     g.tick > text {
-        font-size: 0.9em;
+        font-size: 1em;
     }
     g > text.axis-label {
         font-weight: bold;
