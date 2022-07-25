@@ -591,9 +591,42 @@ text.annotation-note-label {
     transform: translate(10px, 10px);
 }
 
+.vis2 text.annotation-note-label {
+    font-size: 12px;
+    transform: translate(10px, 10px);
+}
 
+.vis3 text.annotation-note-label {
+    font-size: 12px;
+    transform: translate(10px, 10px);
+}
 
+.conclusion-overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.8);
+    z-index: 99999999;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
 
+    .message-container {
+        background: white;
+        width: 50%;
+        margin: 0 auto;
+        padding: 40px;
+        box-shadow: 0px 0px 5px #646464;
+    }
+
+        .message-controls-container {
+            display: flex;
+            flex-direction: row-reverse;
+        }
 
 
 .range_container {

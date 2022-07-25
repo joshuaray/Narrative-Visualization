@@ -9,8 +9,8 @@ var max = (data, key) => {
 
 var intro = () => {
     destroy();
-    var container = document.getElementById('intro');
-    container.classList.add('overlay');
+    var introContainer = document.getElementById('intro');
+    introContainer.classList.add('overlay');
     document.getElementById('conclusion').classList.remove('overlay');
 }
 
@@ -88,21 +88,11 @@ var steps = [
         ],
         content: {
             annotations: (data) => [
-                // {
-                //     note: { label: 'Annotation explanation' },
-                //     x: 400,
-                //     y: 300,
-                //     dx: 150,
-                //     dy: -100,
-                //     subject: {
-                //         radius: 75,
-                //         radiusPadding: 5
-                //     },
-                //     data: data.filter(d => Number(d['Popularity']) > 12) // TODO: data.filter
-                // },
                 {
+                    delay: 2200,
+                    type: annotationType.circle,
                     note: { 
-                        label: '5 of the top 7 most popular movies from 1960 to 2015 had a budget between 130 and 160 million.',
+                        label: '5 of the top 7 most popular movies from 1960 to 2015 had a budget between 130 and 160 million USD.',
                         class: 'vis1' 
                     },
                     x: 400,
@@ -113,9 +103,11 @@ var steps = [
                         radius: 50,
                         radiusPadding: 0
                     },
-                    data: data.filter(d => Number(d['Popularity']) > 12) // TODO: data.filter
+                    data: data.filter(d => Number(d['Popularity']) > 12)
                 },
                 {
+                    delay: 2200,
+                    type: annotationType.circle,
                     note: { label: '' },
                     x: 410,
                     y: 360,
@@ -125,7 +117,7 @@ var steps = [
                         radius: 60,
                         radiusPadding: 0
                     },
-                    data: data.filter(d => Number(d['Popularity']) > 12) // TODO: data.filter
+                    data: data.filter(d => Number(d['Popularity']) > 12)
                 }
             ],
             x: 'Budget (Inflation Adjusted)',
@@ -162,12 +154,30 @@ var steps = [
             }
         ],
         content: {
-            annotations: [],
+            annotations: (data) => [
+                {
+                    delay: 1000,
+                    type: annotationType.rectangle,
+                    note: { 
+                        label: 'Music, War, History, Western, Documentary, and Foreign genres have a significantly lower share of overall revenue than other genres.',
+                        class: 'vis2' 
+                    },
+                    x: 625,
+                    y: 375,
+                    dx: 50,
+                    dy: -150,
+                    subject: {
+                        height: 125,
+                        width: 250,
+                        radiusPadding: 0
+                    }
+                }
+            ],
             title: (data) => 'Inflation Adjusted Revenue by Genre and Release Decade',
             heightkey: 'Revenue (Inflation Adjusted)',
             stackkey: 'Release Year',
             columnkey: 'Genres',
-            columngroups: (self, data) => data.flatMap(d => d[self.columnkey].split('|')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != ''),
+            columngroups: (self, data) => data.flatMap(d => d[self.columnkey].split('|')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != '').filter(x => x != 'TV Movie'),
             stackgroups: (self, data) => data.flatMap(d => Number(d[self.stackkey].substring(0, 3) + '0')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != '').sort(a => a),
             ymax: (self, data) => Math.round(Number(self.columngroups(self, data).map(g => {
                 return data.filter(d => d[self.columnkey].includes(g)).map(d => d[self.heightkey]).map(d => parseFloat(d)).reduce((a,b)=>Number(a)+Number(b))
@@ -202,12 +212,30 @@ var steps = [
             }
         ],
         content: {
-            annotations: [],
+            annotations: (data) => [
+                {
+                    delay: 1000,
+                    type: annotationType.rectangle,
+                    note: { 
+                        label: 'Music, War, History, and Western genres have larger shares of revenue from the 1960s decade than other genres, suggesting they have decreased in popularity.',
+                        class: 'vis3' 
+                    },
+                    x: 225,
+                    y: 45,
+                    dx: 220,
+                    dy: 150,
+                    subject: {
+                        height: 100,
+                        width: 150,
+                        radiusPadding: 0
+                    }
+                }
+            ],
             title: (data) => 'Genre Revenue Breakdown by Decade',
             yname: 'Percentage of Genre Revenue',
             stackkey: 'Release Year',
             columnkey: 'Genres',
-            columngroups: (self, data) => data.flatMap(d => d[self.columnkey].split('|')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != ''),
+            columngroups: (self, data) => data.flatMap(d => d[self.columnkey].split('|')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != '').filter(x => x != 'TV Movie'),
             stackgroups: (self, data) => data.flatMap(d => Number(d[self.stackkey].substring(0, 3) + '0')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x != '').sort(a => a),
             ymax: (self, data) => 100,
             groupfunc: (row, group) => Number(row['Release Year'].substring(0,3) + '0') == group,
@@ -310,16 +338,45 @@ var steps = [
             color: (row) => row['Release Year'].substring(0,3) + '0',
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
+            prompt: 'scenes are done, you can now filter the data as you desire to learn additional insights.',
             func: (self, data) => scatterplot(self.data(self, data), self.title(data), min(data, self.x), max(data, self.x), min(data, self.y), max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['blue', 'orange'], self.colorbuckets(data), self.color, self.annotations(self.data(self, data)))
         }
     }
 ];
 
+showPrompt = (prompt) => {
+    if (prompt == '' || prompt == null)
+        return;
+    var body = document.getElementsByTagName('body')[0];
+    var overlay = document.createElement('div');
+    overlay.classList.add('conclusion-overlay');
+    var message = document.createElement('div');
+    message.classList.add('message-container');
+    var text = document.createElement('span');
+    text.innerText = prompt;
+    message.appendChild(text);
+    var buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('message-controls-container');
+    var button = document.createElement('button');
+    button.innerText = 'OK';
+    button.onclick = () => {
+        Array.from(document.getElementsByClassName('conclusion-overlay')).forEach(x => x.remove());
+    }
+    buttonContainer.appendChild(button);
+    message.appendChild(buttonContainer);
+    overlay.appendChild(message);
+    body.appendChild(overlay);
+}
+
 generate = async (chart) => {
     get(function(data) {
         window.data = data;
-        chart.content.func(chart.content, data);
-        setupFilters(chart, chart.content.data(chart.content, data));
+        showPrompt(chart.content.prompt);
+        if (data != null && chart.content != null) {
+            chart.content.func(chart.content, data);
+            if (chart.content.data != null)
+                setupFilters(chart, chart.content.data(chart.content, data));
+        }
     });
 };
 
@@ -372,7 +429,7 @@ var changeStep = async (modifier) => {
     var next = document.getElementsByClassName('step')[currentStep];
     next.classList.add('step-active');
 
-    if (currentStep != 0 && currentStep != steps.length - 1)
+    //if (currentStep != 0 && currentStep != steps.length - 1)
         if (document.getElementsByClassName('overlay').length > 0)
             document.getElementsByClassName('overlay')[0].classList.remove('overlay');
 
@@ -420,7 +477,7 @@ var setup = () => {
         });
     });
 
-    changeStep(1);
+    changeStep(3);
 }
 
 setup();

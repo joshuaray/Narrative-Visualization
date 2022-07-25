@@ -203,8 +203,7 @@ var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', 
 
     labels(xkey, ykey, title);
     colorlegend(colorbuckets.map(c => color(c)), colorbuckets[0], colorbuckets[colorbuckets.length - 1], colortitle);
-    if (annotations.length > 0)
-        annotate(annotations);
+    annotate(annotations);
 }
 
 var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightkey = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['orange', 'blue'],  columnfunc = (row, column) => false, groupfunc = (row, group) => false, annotations = []) => {
@@ -294,6 +293,7 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
     var sortedcolors = stackgroups.sort((a,b) => a - b);
     labels(xkey, heightkey, title);
     colorlegend(stackgroups.map((c,i) => color(i)), sortedcolors[0], sortedcolors[sortedcolors.length - 1], colortitle);
+    annotate(annotations);
 }
 
 var stackedcolumn100 = (data, title = '', columngroups = [], stackgroups = [], yname = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['yellow', 'brown'], heightfunc = (data, column, group) => 0, columnfunc = (row, column) => false, groupfunc = (row, group) => false, columnsortfunc = (data, column, group) => 0, annotations = []) => {
@@ -404,4 +404,5 @@ var stackedcolumn100 = (data, title = '', columngroups = [], stackgroups = [], y
     var sortedcolors = stackgroups.sort((a,b) => a - b);
     labels(xkey, yname, title);
     colorlegend(stackgroups.map((c,i) => color(i)), sortedcolors[0], sortedcolors[sortedcolors.length - 1], colortitle);
+    annotate(annotations);
 }
