@@ -87,6 +87,47 @@ var steps = [
             }
         ],
         content: {
+            annotations: (data) => [
+                // {
+                //     note: { label: 'Annotation explanation' },
+                //     x: 400,
+                //     y: 300,
+                //     dx: 150,
+                //     dy: -100,
+                //     subject: {
+                //         radius: 75,
+                //         radiusPadding: 5
+                //     },
+                //     data: data.filter(d => Number(d['Popularity']) > 12) // TODO: data.filter
+                // },
+                {
+                    note: { 
+                        label: '5 of the top 7 most popular movies from 1960 to 2015 had a budget between 130 and 160 million.',
+                        class: 'vis1' 
+                    },
+                    x: 400,
+                    y: 250,
+                    dx: 250,
+                    dy: -75,
+                    subject: {
+                        radius: 50,
+                        radiusPadding: 0
+                    },
+                    data: data.filter(d => Number(d['Popularity']) > 12) // TODO: data.filter
+                },
+                {
+                    note: { label: '' },
+                    x: 410,
+                    y: 360,
+                    dx: 300,
+                    dy: -185,
+                    subject: {
+                        radius: 60,
+                        radiusPadding: 0
+                    },
+                    data: data.filter(d => Number(d['Popularity']) > 12) // TODO: data.filter
+                }
+            ],
             x: 'Budget (Inflation Adjusted)',
             y: 'Revenue (Inflation Adjusted)',
             size: 'Popularity',
@@ -94,7 +135,7 @@ var steps = [
             color: (row) => row['Release Year'].substring(0,3) + '0',
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
-            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['white', 'blue'], self.colorbuckets(data), self.color)
+            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['white', 'blue'], self.colorbuckets(data), self.color, self.annotations(self.data(self, data)))
         }
     },
     {
@@ -121,6 +162,7 @@ var steps = [
             }
         ],
         content: {
+            annotations: [],
             title: (data) => 'Inflation Adjusted Revenue by Genre and Release Decade',
             heightkey: 'Revenue (Inflation Adjusted)',
             stackkey: 'Release Year',
@@ -133,7 +175,7 @@ var steps = [
             groupfunc: (row, group) => Number(row['Release Year'].substring(0,3) + '0') == group,
             columnfunc: (row, column) => row['Genres'].includes(column),
             data: (self, data) => data.filter(d => Number(d[self.heightkey]) > 0 && Number(d[self.heightkey] > 0)),
-            func: (self, data) => stackedbar(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.heightkey, 'Genre', 0, self.ymax(self, data), 'Release Decade', ['orange', 'blue'], self.columnfunc, self.groupfunc)
+            func: (self, data) => stackedbar(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.heightkey, 'Genre', 0, self.ymax(self, data), 'Release Decade', ['orange', 'blue'], self.columnfunc, self.groupfunc, self.annotations(self.data(self, data)))
         }
     },
     {
@@ -160,6 +202,7 @@ var steps = [
             }
         ],
         content: {
+            annotations: [],
             title: (data) => 'Genre Revenue Breakdown by Decade',
             yname: 'Percentage of Genre Revenue',
             stackkey: 'Release Year',
@@ -185,7 +228,7 @@ var steps = [
             },
             columnsortfunc: (data, column, group) => data.filter(f => f['Genres'].includes(column)).filter(f => f['Release Year'].substring(0,3) + '0' == group).map(z => Number(z['Revenue (Inflation Adjusted)'])).reduce((a,b) => a + b, 0),
             data: (self, data) => data.filter(d => d['Has Financial Data']),
-            func: (self, data) => stackedcolumn100(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.yname, 'Genre', 0, self.ymax(self, data), 'Release Decade', ['yellow', 'brown'], self.heightfunc, self.columnfunc, self.groupfunc, self.columnsortfunc)
+            func: (self, data) => stackedcolumn100(self.data(self, data), self.title(data), self.columngroups(self, data), self.stackgroups(self, data), self.yname, 'Genre', 0, self.ymax(self, data), 'Release Decade', ['yellow', 'brown'], self.heightfunc, self.columnfunc, self.groupfunc, self.columnsortfunc, self.annotations(self.data(self, data)))
         }
     },
     {
@@ -259,6 +302,7 @@ var steps = [
             }
         ],
         content: {
+            annotations: (data) => [],
             x: 'Budget (Inflation Adjusted)',
             y: 'Revenue (Inflation Adjusted)',
             size: 'Popularity',
@@ -266,7 +310,7 @@ var steps = [
             color: (row) => row['Release Year'].substring(0,3) + '0',
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
-            func: (self, data) => scatterplot(self.data(self, data), self.title(data), min(data, self.x), max(data, self.x), min(data, self.y), max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['blue', 'orange'], self.colorbuckets(data), self.color)
+            func: (self, data) => scatterplot(self.data(self, data), self.title(data), min(data, self.x), max(data, self.x), min(data, self.y), max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['blue', 'orange'], self.colorbuckets(data), self.color, self.annotations(self.data(self, data)))
         }
     }
 ];
@@ -376,7 +420,7 @@ var setup = () => {
         });
     });
 
-    changeStep(4);
+    changeStep(1);
 }
 
 setup();

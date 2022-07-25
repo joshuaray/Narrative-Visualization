@@ -155,7 +155,7 @@ var colorlegend = (colors = [], min, max, title) => {
             .attr('opacity', 1);
 }
 
-var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', ykey = '', radiusKey = '', colortitle = '', colorrange = ['white','blue'], colorbuckets = [], colorfunc = (x) => 0) => {
+var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', ykey = '', radiusKey = '', colortitle = '', colorrange = ['white','blue'], colorbuckets = [], colorfunc = (x) => 0, annotations = []) => {
     var svg = getSvg();
     xmax = xmax * 1.05;
     ymax = ymax * 1.05;
@@ -203,9 +203,11 @@ var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', 
 
     labels(xkey, ykey, title);
     colorlegend(colorbuckets.map(c => color(c)), colorbuckets[0], colorbuckets[colorbuckets.length - 1], colortitle);
+    if (annotations.length > 0)
+        annotate(annotations);
 }
 
-var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightkey = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['orange', 'blue'],  columnfunc = (row, column) => false, groupfunc = (row, group) => false) => {
+var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightkey = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['orange', 'blue'],  columnfunc = (row, column) => false, groupfunc = (row, group) => false, annotations = []) => {
     var svg = getSvg();
     ymax = ymax * 1.05;
 
@@ -294,7 +296,7 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
     colorlegend(stackgroups.map((c,i) => color(i)), sortedcolors[0], sortedcolors[sortedcolors.length - 1], colortitle);
 }
 
-var stackedcolumn100 = (data, title = '', columngroups = [], stackgroups = [], yname = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['yellow', 'brown'], heightfunc = (data, column, group) => 0, columnfunc = (row, column) => false, groupfunc = (row, group) => false, columnsortfunc = (data, column, group) => 0) => {
+var stackedcolumn100 = (data, title = '', columngroups = [], stackgroups = [], yname = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['yellow', 'brown'], heightfunc = (data, column, group) => 0, columnfunc = (row, column) => false, groupfunc = (row, group) => false, columnsortfunc = (data, column, group) => 0, annotations = []) => {
     var svg = getSvg();
 
     stackgroups = stackgroups.sort((a,b) => a - b);

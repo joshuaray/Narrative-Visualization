@@ -577,9 +577,19 @@ h3.filter-name {
     }
 
 
+path.subject, path.connector, path.note-line, text.annotation-note-label {
+    stroke: black;
+    stroke-width: 3;
+}
 
+text.annotation-note-label {
+    stroke-width: 1;
+}
 
-
+.vis1 text.annotation-note-label {
+    font-size: 12px;
+    transform: translate(10px, 10px);
+}
 
 
 
