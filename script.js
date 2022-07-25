@@ -260,7 +260,7 @@ var steps = [
         }
     },
     {
-        name: 'Conclusion',
+        name: 'Step 4',
         filters: [
             {
                 id: 'revenue',
