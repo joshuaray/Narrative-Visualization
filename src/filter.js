@@ -36,6 +36,7 @@ setupFilters = (chart, data) => {
         var filtered = default_data;
         for (var x = 0; x < filters.length; x++)
             filtered = filters[x].filter(filtered);
+            console.log(filtered);
         chart.content.func(chart.content, filtered);
     }
 }

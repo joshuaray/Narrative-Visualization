@@ -399,14 +399,10 @@ div.property {
 
 #filter-button-container {
     position: fixed;
-    bottom: 100px;
-    width: calc(30% - 18px);
-    background: rgb(18,20,23);
-    right: 18px;
-    display: flex;
-    flex-direction: row;
-    border-top: 1px solid rgb(46,49,57);
-    box-shadow: 0px 0px 20px black;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    z-index: -1000;
 }
 
     #filter-button-container > button {
@@ -445,17 +441,119 @@ h3.filter-name {
 
 
 
+.string-list-selection-container {
+    display: flex;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+    .string-list-selection-container > i {
+        background: rgba(0,0,0,0.3);
+        border-radius: 5px;
+        border: 1px solid;
+        transition: all .2s ease;
+        cursor: pointer;
+        margin-bottom: 5px;
+    }
+
+        .string-list-selection-container > i:hover {
+            background: rgba(0,0,0,0.6);
+            transition: all .2s ease;
+        }
+
+    .string-list-item {
+        display: flex;
+        flex-direction: row;
+        width: auto;
+        flex-shrink: 1;
+        flex-grow: 0;
+        border: 1px solid;
+        flex-wrap: wrap;
+        align-content: center;
+        align-items: center;
+        border-radius: 5px;
+        padding-left: 5px;
+        padding-right: 5px;
+        margin-right: 5px;
+        user-select: none;
+        margin-bottom: 5px;
+    }
+
+        .string-list-item > i {
+            cursor: pointer;
+            font-size: 12px;
+            transition: all .2s ease;
+            border: 1px solid transparent;
+            margin-left: 5px;
+            margin-bottom: 5px;
+        }
+
+            .string-list-item > i:hover {
+                background: rgba(0,0,0,0.4);
+                border-radius: 5px;
+                border: 1px solid rgba(255,255,255,0.2);
+                transition: all .2s ease;
+            }
 
 
+.modal {
+    padding: 50px;
+    transition: all .3s ease;
+    z-index: 9999999999;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: rgba(0,0,0,0.9);
+    position: fixed;
+}
 
+    .modal-content {
+        height: 100%;
+        background: rgb(30,32,37);
+        border-radius: 20px;
+        border: 2px solid rgb(255 255 255 / 15%);
+        box-shadow: 0px 0px 20px rgb(0 0 0 / 30%);
+        color: white;
+        padding: 20px;
+    }
 
+    items-container {
+        overflow-y: scroll;
+        display: flex;
+        flex-wrap: wrap;
+        height: calc(100% - 100px);
+        padding: 10px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 10px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        align-content: flex-start;
+        align-items: center;
+    }
 
+        items-container > .string-list-item {
+            height: 30px;
+            transition: all .2s ease;
+            margin: 5px;
+            cursor: pointer;
+        }
 
+        items-container > .selected {
+            background: rgb(86 89 108);
+            transition: all .2s ease;
+        }
 
-
-
-
-
+    .modal-content > .button-container {
+        background: rgba(0,0,0,0.8);
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border: 1px solid rgba(0,0,0,0.4);
+        flex-direction: row-reverse;
+        display: flex;
+    }
 
 
 

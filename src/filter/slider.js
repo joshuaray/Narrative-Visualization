@@ -123,6 +123,8 @@ slider = (chart, data, id, container, name = '', min = (data) => 0, max = (data)
     
     from.oninput = () => controlToSlider(from, to, toContainer.input, fromContainer.input, label);
     to.oninput = () => controlFromSlider(from, to, fromContainer.input, toContainer.input, label);
+    from.onmouseup = () => document.getElementById('filter-apply').click();
+    to.onmouseup = () => document.getElementById('filter-apply').click();
 
     return {
         reset: (data) => {

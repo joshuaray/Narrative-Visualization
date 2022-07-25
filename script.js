@@ -235,13 +235,20 @@ var steps = [
                 max: (data) => 10,
                 filter: (data, min, max) => data.filter(d => d['Rating Average'] >= Math.floor(min)).filter(d => d['Rating Average'] <= Math.ceil(max)),
                 func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter, self.label)
+            },
+            {
+                id: 'genre',
+                name: 'Genre',
+                values: (data) => data.map(d => d['Genres']).flatMap(m => m.split('|')).filter((v, i, a) => a.indexOf(v) == i),
+                filter: (data, list) => list.length == 0 ? data : data.filter(d => d['Genres'].split('|').filter(f => list.find(l => l == f)).length > 0),
+                func: (self, container, chart, data) => stringList(chart, data, self.id, container, self.name, [], self.values, self.filter)
             }
         ],
         content: {
             x: 'Budget (Inflation Adjusted)',
             y: 'Revenue (Inflation Adjusted)',
             size: 'Popularity',
-            title: (data) => 'Budget, Revenue, and Popularity of Box Office Releases Between ' + min(data, 'Release Year') + ' and ' + max(data, 'Release Year'),
+            title: (data) => 'Budget, Revenue, and Popularity of Box Office Releases',
             color: (row) => row['Release Year'].substring(0,3) + '0',
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
