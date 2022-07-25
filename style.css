@@ -510,6 +510,27 @@ h3.filter-name {
     position: fixed;
 }
 
+    .modal-search {
+        float: right;
+        display: flex;
+        margin-top: 10px;
+        height: 30px;
+        align-items: center;
+    }
+
+        .modal-search > input {
+            border-radius: 5px;
+            border: none;
+            font-size: 14px;
+            height: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .modal-search > i {
+            margin-left: 10px;
+        }
+
     .modal-content {
         height: 100%;
         background: rgb(30,32,37);
@@ -539,6 +560,10 @@ h3.filter-name {
             transition: all .2s ease;
             margin: 5px;
             cursor: pointer;
+        }
+
+        .string-list-item.hide {
+            display: none;
         }
 
         items-container > .selected {

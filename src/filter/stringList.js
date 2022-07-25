@@ -29,6 +29,27 @@ showStringListModal = (id = '', title = '', currentSelection = [], allValues = [
     modalContent.classList.add('modal-content');
     var header = document.createElement('h1');
     header.innerText = title;
+    var searchContainer = document.createElement('div');
+    searchContainer.classList.add('modal-search');
+    var searchInput = document.createElement('input');
+    var searchIcon = document.createElement('i');
+    searchIcon.classList.add('material-icons');
+    searchIcon.textContent = 'search';
+    searchContainer.appendChild(searchInput);
+    searchContainer.appendChild(searchIcon);
+    header.appendChild(searchContainer);
+
+    searchInput.oninput = (e) => {
+        console.log(e);
+        var elements = document.querySelectorAll('items-container > .string-list-item:not(.selected)');
+        Array.from(elements).forEach(a => {
+            if (a.textContent.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase()))
+                a.classList.remove('hide');
+            else 
+                a.classList.add('hide');
+        })
+    }
+
     var container = document.createElement('items-container');
     var unselected = allValues.filter(a => currentSelection.find(c => a == c) == null);
     allValues = [...currentSelection, ...unselected];
@@ -45,7 +66,7 @@ showStringListModal = (id = '', title = '', currentSelection = [], allValues = [
         }
         else {
             remove.textContent = 'add';
-            item.classList.remove('string-liste-item-selected_' + id);
+            item.classList.remove('string-list-item-selected_' + id);
             item.classList.remove('selected');
         }
         item.onclick = (e) => {
@@ -73,13 +94,13 @@ showStringListModal = (id = '', title = '', currentSelection = [], allValues = [
     var clear = document.createElement('button');
     clear.innerText = 'Clear';
     clear.onclick = () => {
-        Array.from(document.querySelectorAll('.string-list-item-selected_' + id)).forEach(a => a.click());
+        Array.from(document.querySelectorAll('.string-list-item-selected_' + id + ':not(.hide)')).forEach(a => a.click());
     }
 
     var all = document.createElement('button');
     all.innerText = 'Select All';
     all.onclick = () => {
-        Array.from(document.querySelectorAll('.string-list-item:not(.string-list-item-selected_' + id + ')')).forEach(a => a.click());
+        Array.from(document.querySelectorAll('.string-list-item:not(.string-list-item-selected_' + id + '):not(.hide)')).forEach(a => a.click());
     }
 
     var done = document.createElement('button');
@@ -133,7 +154,6 @@ stringList = (chart, data, id, container, name = '', initialValues = [], values 
         setupStringListValues(listContainer, newList, id, onChange);
         addButton();
         document.getElementById('filter-apply').click();
-        // return filter(data, newList);
     }
 
     setupStringListValues(listContainer, list, id, onChange);

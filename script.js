@@ -242,6 +242,20 @@ var steps = [
                 values: (data) => data.map(d => d['Genres']).flatMap(m => m.split('|')).filter((v, i, a) => a.indexOf(v) == i),
                 filter: (data, list) => list.length == 0 ? data : data.filter(d => d['Genres'].split('|').filter(f => list.find(l => l == f)).length > 0),
                 func: (self, container, chart, data) => stringList(chart, data, self.id, container, self.name, [], self.values, self.filter)
+            },
+            {
+                id: 'director',
+                name: 'Director',
+                values: (data) => data.map(d => d['Director']).flatMap(m => m.split('|')).filter((v, i, a) => a.indexOf(v) == i),
+                filter: (data, list) => list.length == 0 ? data : data.filter(d => d['Director'].split('|').filter(f => list.find(l => l == f)).length > 0),
+                func: (self, container, chart, data) => stringList(chart, data, self.id, container, self.name, [], self.values, self.filter)
+            },
+            {
+                id: 'company',
+                name: 'Production Company',
+                values: (data) => data.map(d => d['Production Company']).flatMap(m => m.split('|')).filter((v, i, a) => a.indexOf(v) == i).filter(x => x.trim() != ''),
+                filter: (data, list) => list.length == 0 ? data : data.filter(d => d['Production Company'].split('|').filter(f => list.find(l => l == f)).length > 0),
+                func: (self, container, chart, data) => stringList(chart, data, self.id, container, self.name, [], self.values, self.filter)
             }
         ],
         content: {
