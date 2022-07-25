@@ -192,11 +192,28 @@ var steps = [
         name: 'Step 4',
         filters: [
             {
+                id: 'revenue',
                 name: 'Revenue (Inflation Adjusted)',
                 min: (data) => min(data, 'Revenue (Inflation Adjusted)'),
                 max: (data) => max(data, 'Revenue (Inflation Adjusted)'),
-                filter: (data, min, max) => data.filter(d => d['Revenue (Inflation Adjusted)'] > min).filter(d => d['Revenue (Inflation Adjusted)'] < max),
-                func: (self, chart, data, onchange) => slider(chart, data, self.name, self.min(data), self.max(data), self.filter, onchange)
+                filter: (data, min, max) => data.filter(d => d['Revenue (Inflation Adjusted)'] > Math.floor(min)).filter(d => d['Revenue (Inflation Adjusted)'] < Math.ceil(max)),
+                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter)
+            },
+            {
+                id: 'budget',
+                name: 'Budget (Inflation Adjusted)',
+                min: (data) => min(data, 'Budget (Inflation Adjusted)'),
+                max: (data) => max(data, 'Budget (Inflation Adjusted)'),
+                filter: (data, min, max) => data.filter(d => d['Budget (Inflation Adjusted)'] > Math.floor(min)).filter(d => d['Budget (Inflation Adjusted)'] < Math.ceil(max)),
+                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter)
+            },
+            {
+                id: 'year',
+                name: 'Release Year',
+                min: (data) => min(data, 'Release Year'),
+                max: (data) => max(data, 'Release Year'),
+                filter: (data, min, max) => data.filter(d => d['Release Year'] > Math.floor(min)).filter(d => d['Release Year'] < Math.ceil(max)),
+                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter)
             }
         ],
         content: {
@@ -207,7 +224,7 @@ var steps = [
             color: (row) => row['Release Year'].substring(0,3) + '0',
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
-            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['blue', 'orange'], self.colorbuckets(data), self.color)
+            func: (self, data) => scatterplot(self.data(self, data), self.title(data), min(data, self.x), max(data, self.x), min(data, self.y), max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['blue', 'orange'], self.colorbuckets(data), self.color)
         }
     },
     {
@@ -219,22 +236,11 @@ var steps = [
     }
 ];
 
-setupFilters = (chart, data, filters = [], onchange = (chart, data) => {}) => {
-    var container = document.getElementById('controls');
-    if (filters.length == 0) {
-        container.classList.add('hidden');
-        return;
-    }
-    else 
-        container.classList.remove('hidden');
-    filters.forEach(f => f.func(f, chart, data, onchange));
-}
-
 generate = async (chart) => {
     get(function(data) {
         window.data = data;
         chart.content.func(chart.content, data);
-        setupFilters(chart, data, chart.filters, chart.content.func);
+        setupFilters(chart, chart.content.data(chart.content, data));
     });
 };
 
@@ -335,7 +341,7 @@ var setup = () => {
         });
     });
 
-    changeStep(0);
+    changeStep(4);
 }
 
 setup();

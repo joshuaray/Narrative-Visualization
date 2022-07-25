@@ -168,7 +168,7 @@ var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', 
     var grid = svg.append('g')
         .attr('transform', 'translate(' + 0 + ',' + 0 + ')');
 
-    grid.append('g').attr('transform', 'translate(0,' + height() + ')').call(d3.axisBottom(x))
+    grid.append('g').attr('class', 'x-axis').attr('transform', 'translate(0,' + height() + ')').call(d3.axisBottom(x))
         .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 200).attr('opacity', 1))
         .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(1000).attr('stroke-opacity', 1));
 
@@ -195,6 +195,11 @@ var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', 
             .transition()
                 .delay((d, i) => 100 + 30 * d[radiusKey])
                 .attr('r', (d) => 1 + (radiusKey == null ? 0 : Number(d[radiusKey])));
+
+    svg.select('.x-axis')
+        .selectAll('text')
+        .attr('text-anchor', 'start')
+        .attr('transform', 'rotate(45)');
 
     labels(xkey, ykey, title);
     colorlegend(colorbuckets.map(c => color(c)), colorbuckets[0], colorbuckets[colorbuckets.length - 1], colortitle);
