@@ -194,26 +194,47 @@ var steps = [
             {
                 id: 'revenue',
                 name: 'Revenue (Inflation Adjusted)',
+                label: (min = 0, max = 0) => { return { min: Math.floor(min).toLocaleString(), max: Math.ceil(max).toLocaleString() } },
                 min: (data) => min(data, 'Revenue (Inflation Adjusted)'),
                 max: (data) => max(data, 'Revenue (Inflation Adjusted)'),
-                filter: (data, min, max) => data.filter(d => d['Revenue (Inflation Adjusted)'] > Math.floor(min)).filter(d => d['Revenue (Inflation Adjusted)'] < Math.ceil(max)),
-                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter)
+                filter: (data, min, max) => data.filter(d => d['Revenue (Inflation Adjusted)'] >= Math.floor(min)).filter(d => d['Revenue (Inflation Adjusted)'] <= Math.ceil(max)),
+                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter, self.label)
             },
             {
                 id: 'budget',
                 name: 'Budget (Inflation Adjusted)',
+                label: (min = 0, max = 0) => { return { min: Math.floor(min).toLocaleString(), max: Math.ceil(max).toLocaleString() } },
                 min: (data) => min(data, 'Budget (Inflation Adjusted)'),
                 max: (data) => max(data, 'Budget (Inflation Adjusted)'),
-                filter: (data, min, max) => data.filter(d => d['Budget (Inflation Adjusted)'] > Math.floor(min)).filter(d => d['Budget (Inflation Adjusted)'] < Math.ceil(max)),
-                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter)
+                filter: (data, min, max) => data.filter(d => d['Budget (Inflation Adjusted)'] >= Math.floor(min)).filter(d => d['Budget (Inflation Adjusted)'] <= Math.ceil(max)),
+                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter, self.label)
             },
             {
                 id: 'year',
                 name: 'Release Year',
+                label: (min = 0, max = 0) => { return { min: min, max: max } },
                 min: (data) => min(data, 'Release Year'),
                 max: (data) => max(data, 'Release Year'),
-                filter: (data, min, max) => data.filter(d => d['Release Year'] > Math.floor(min)).filter(d => d['Release Year'] < Math.ceil(max)),
-                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter)
+                filter: (data, min, max) => data.filter(d => d['Release Year'] >= Math.floor(min)).filter(d => d['Release Year'] <= Math.ceil(max)),
+                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter, self.label)
+            },
+            {
+                id: 'runtime',
+                name: 'Runtime (Minutes)',
+                label: (min = 0, max = 0) => { return { min: min, max: max } },
+                min: (data) => min(data, 'Runtime (Minutes)'),
+                max: (data) => max(data, 'Runtime (Minutes)'),
+                filter: (data, min, max) => data.filter(d => d['Runtime (Minutes)'] >= Math.floor(min)).filter(d => d['Runtime (Minutes)'] <= Math.ceil(max)),
+                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter, self.label)
+            },
+            {
+                id: 'rating',
+                name: 'Rating Average',
+                label: (min = 0, max = 0) => { return { min: min, max: max } },
+                min: (data) => 0,
+                max: (data) => 10,
+                filter: (data, min, max) => data.filter(d => d['Rating Average'] >= Math.floor(min)).filter(d => d['Rating Average'] <= Math.ceil(max)),
+                func: (self, container, chart, data) => slider(chart, data, self.id, container, self.name, self.min, self.max, self.filter, self.label)
             }
         ],
         content: {

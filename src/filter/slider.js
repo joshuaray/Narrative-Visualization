@@ -1,4 +1,4 @@
-function controlFromSlider(fromSlider, toSlider, fromInput, toInput) {
+function controlFromSlider(fromSlider, toSlider, fromInput, toInput, label = (val) => '') {
   const [from, to] = getParsed(fromSlider, toSlider);
   fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
   if (from > to) {
@@ -7,11 +7,12 @@ function controlFromSlider(fromSlider, toSlider, fromInput, toInput) {
   } else {
     fromInput.value = from;
   }
-  fromInput.value = fromSlider.value;
-  toInput.value = toSlider.value;
+  var labels = label(fromSlider.value, toSlider.value);
+  fromInput.value = labels.min;
+  toInput.value = labels.max;
 }
 
-function controlToSlider(fromSlider, toSlider, toInput, fromInput) {
+function controlToSlider(fromSlider, toSlider, toInput, fromInput, label = (val) => '') {
   const [from, to] = getParsed(fromSlider, toSlider);
   fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
   setToggleAccessible(toSlider);
@@ -22,13 +23,14 @@ function controlToSlider(fromSlider, toSlider, toInput, fromInput) {
     toInput.value = from;
     toSlider.value = from;
   }
-  fromInput.value = fromSlider.value;
-  toInput.value = toSlider.value;
+  var labels = label(fromSlider.value, toSlider.value);
+  fromInput.value = labels.min;
+  toInput.value = labels.max;
 }
 
 function getParsed(currentFrom, currentTo) {
-  const from = parseInt(currentFrom.value, 10);
-  const to = parseInt(currentTo.value, 10);
+  const from = Number(currentFrom.value);
+  const to = Number(currentTo.value);
   return [from, to];
 }
 
@@ -81,7 +83,7 @@ labelInput = (min, max, label, id, value) => {
     var input = document.createElement('input');
     input.classList.add('form_control_container__time__input');
     input.id = id;
-    input.value = value.toLocaleString();
+    input.value = value;
     input.min = min;
     input.max = max;
     input.readOnly = true;
@@ -90,7 +92,7 @@ labelInput = (min, max, label, id, value) => {
     return {container: container, element: element, input: input};
 }
 
-slider = (chart, data, id, container, name = '', min = (data) => 0, max = (data) => 0, filter = () => {}) => {
+slider = (chart, data, id, container, name = '', min = (data) => 0, max = (data) => 0, filter = () => {}, label = (min, max) => {min = '', max = ''}) => {
     var minVal = min(data);
     var maxVal = max(data);
     
@@ -104,8 +106,9 @@ slider = (chart, data, id, container, name = '', min = (data) => 0, max = (data)
     var to = sliderInput(minVal, maxVal, 'slider-max', maxVal, 'toSlider_' + id);
     var inputContainer = document.createElement('div');
     inputContainer.classList.add('form_control');
-    var fromContainer = labelInput(minVal, maxVal, 'From', 'fromInput', minVal);
-    var toContainer = labelInput(minVal, maxVal, 'To', 'toInput', maxVal);
+    var labels = label(minVal, maxVal);
+    var fromContainer = labelInput(minVal, maxVal, 'From', 'fromInput', labels.min);
+    var toContainer = labelInput(minVal, maxVal, 'To', 'toInput', labels.max);
     inputContainer.appendChild(fromContainer.container);
     inputContainer.appendChild(toContainer.container);
         
@@ -118,8 +121,8 @@ slider = (chart, data, id, container, name = '', min = (data) => 0, max = (data)
     fillSlider(from, to, '#C6C6C6', '#25daa5', to);
     setToggleAccessible(to);
     
-    from.oninput = () => controlToSlider(from, to, toContainer.input, fromContainer.input);
-    to.oninput = () => controlFromSlider(from, to, fromContainer.input, toContainer.input);
+    from.oninput = () => controlToSlider(from, to, toContainer.input, fromContainer.input, label);
+    to.oninput = () => controlFromSlider(from, to, fromContainer.input, toContainer.input, label);
 
     return {
         reset: (data) => {
@@ -127,8 +130,8 @@ slider = (chart, data, id, container, name = '', min = (data) => 0, max = (data)
             var maxElement = document.getElementById('toSlider_' + id);
             minElement.value = min(data);
             maxElement.value = max(data);
-            controlToSlider(from, to, toContainer.input, fromContainer.input);
-            controlFromSlider(from, to, fromContainer.input, toContainer.input);
+            controlToSlider(from, to, toContainer.input, fromContainer.input, label);
+            controlFromSlider(from, to, fromContainer.input, toContainer.input, label);
         },
         filter: (data) => {
             var minElement = document.getElementById('fromSlider_' + id).value;
