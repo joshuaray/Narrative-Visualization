@@ -189,7 +189,7 @@ var steps = [
         }
     },
     {
-        name: 'Step 4',
+        name: 'Conclusion',
         filters: [
             {
                 id: 'revenue',
@@ -267,13 +267,6 @@ var steps = [
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
             func: (self, data) => scatterplot(self.data(self, data), self.title(data), min(data, self.x), max(data, self.x), min(data, self.y), max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['blue', 'orange'], self.colorbuckets(data), self.color)
-        }
-    },
-    {
-        name: 'Conclusion',
-        description: '',
-        content: {
-            func: (self, data) => conclusion()
         }
     }
 ];

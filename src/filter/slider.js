@@ -15,7 +15,7 @@ function controlFromSlider(fromSlider, toSlider, fromInput, toInput, label = (va
 function controlToSlider(fromSlider, toSlider, toInput, fromInput, label = (val) => '') {
   const [from, to] = getParsed(fromSlider, toSlider);
   fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
-  setToggleAccessible(toSlider);
+  setToggle(toSlider);
   if (from <= to) {
     toSlider.value = to;
     toInput.value = to;
@@ -48,7 +48,7 @@ function fillSlider(from, to, sliderColor, rangeColor, controlSlider) {
       ${sliderColor} 100%)`;
 }
 
-function setToggleAccessible(currentTarget) {
+function setToggle(currentTarget) {
   const toSlider = document.getElementById(currentTarget.id);
   if (Number(currentTarget.value) <= 0 ) {
     toSlider.style.zIndex = 2;
@@ -119,7 +119,7 @@ slider = (chart, data, id, container, name = '', min = (data) => 0, max = (data)
     container.appendChild(rangeContainer);
     
     fillSlider(from, to, '#C6C6C6', '#25daa5', to);
-    setToggleAccessible(to);
+    setToggle(to);
     
     from.oninput = () => controlToSlider(from, to, toContainer.input, fromContainer.input, label);
     to.oninput = () => controlFromSlider(from, to, fromContainer.input, toContainer.input, label);

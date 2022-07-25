@@ -14,11 +14,11 @@ setupFilters = (chart, data) => {
     document.querySelectorAll('filter').forEach(f => f.remove());
     var container = document.getElementById('filters');
     if ((chart.filters ?? []).length == 0) {
-        container.classList.add('hidden');
+        container.parentElement.classList.add('hidden');
         return;
     }
     else 
-        container.classList.remove('hidden');
+        container.parentElement.classList.remove('hidden');
     chart.filters.forEach((f, i) => {
         var filterContainer = document.createElement('filter');
         filterContainer.id = 'filter-' + i;
