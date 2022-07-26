@@ -2,8 +2,8 @@ var datasource = '../data/data.csv';
 var container = 'div#vis';
 var font = "'Noto Sans', sans-serif";
 
-var width = () => document.getElementById('vis').offsetWidth - margin.left - margin.right;
-var height = () => document.getElementById('vis').offsetHeight - margin.top - margin.bottom;
+var width = () => 1920 * (document.querySelector(container).offsetWidth / 1920) - margin.left - margin.right;
+var height = () => 1920 * (document.querySelector(container).offsetWidth / 1920) / 1920 * 1080 - margin.top - margin.bottom;
 var margin = {left: 150, right: 100, top: 50, bottom: 100};
 
 var startingOpacity = 0.0;
@@ -16,6 +16,7 @@ var get = async function(callback) {
 
 var destroy = () => {
     d3.select('#chart').remove();
+    d3.select('.chart-annotation').remove();
 }
 
 var getSvg = () => {
@@ -23,9 +24,12 @@ var getSvg = () => {
 
     var svg = d3.select(container)
         .append('svg')
+            .attr('x', 0)
+            .attr('height', 0)
             .attr('id', 'chart')
             .attr('width', width() + margin.left + margin.right)
             .attr('height', height() + margin.top + margin.bottom)
+            .style('margin-top', (window.innerHeight - height() - margin.top - margin.bottom) / 4)
         .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -155,7 +159,7 @@ var colorlegend = (colors = [], min, max, title) => {
             .attr('opacity', 1);
 }
 
-var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', ykey = '', radiusKey = '', colortitle = '', colorrange = ['white','blue'], colorbuckets = [], colorfunc = (x) => 0, annotations = []) => {
+var scatterplot = async (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', ykey = '', radiusKey = '', colortitle = '', colorrange = ['white','blue'], colorbuckets = [], colorfunc = (x) => 0, annotations = []) => {
     var svg = getSvg();
     xmax = xmax * 1.05;
     ymax = ymax * 1.05;
@@ -177,7 +181,7 @@ var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', 
         .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 100).attr('opacity', 1))
         .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(500).attr('stroke-opacity', 1));
 
-    svg.append('g')
+    var dots = svg.append('g')
         .selectAll('dot')
         .data(data)
         .enter()
@@ -194,7 +198,8 @@ var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', 
                 .style('opacity', 1)
             .transition()
                 .delay((d, i) => 100 + 30 * d[radiusKey])
-                .attr('r', (d) => 1 + (radiusKey == null ? 0 : Number(d[radiusKey])));
+                .attr('r', (d) => 1 + (radiusKey == null ? 0 : Number(d[radiusKey])))
+            .end();
 
     svg.select('.x-axis')
         .selectAll('text')
@@ -203,10 +208,11 @@ var scatterplot = (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', 
 
     labels(xkey, ykey, title);
     colorlegend(colorbuckets.map(c => color(c)), colorbuckets[0], colorbuckets[colorbuckets.length - 1], colortitle);
+    await dots;
     annotate(annotations);
 }
 
-var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightkey = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['orange', 'blue'],  columnfunc = (row, column) => false, groupfunc = (row, group) => false, annotations = []) => {
+var stackedbar = async (data, title = '', columngroups = [], stackgroups = [], heightkey = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['orange', 'blue'],  columnfunc = (row, column) => false, groupfunc = (row, group) => false, annotations = []) => {
     var svg = getSvg();
     ymax = ymax * 1.05;
 
@@ -263,7 +269,7 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
 
     yfunc = (row) => stacks[row.columnindex].filter(s => s.groupindex > row.groupindex).map(s => s.value).reduce((a,b) => a + b, 0);
 
-    svg.append('g')
+    var bars = svg.append('g')
         .selectAll('g')
         .data(stacks)
         .enter()
@@ -283,7 +289,8 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
                 .delay((d, i) => 150 * i + (stackgroups.length - d.groupindex) * 20)
                 .attr('opacity', 1)
                 .attr('y', (d) => y(yfunc(d) + d.value))
-                .attr('height', (d) => y(yfunc(d)) - (y(d.value + yfunc(d))));
+                .attr('height', (d) => y(yfunc(d)) - (y(d.value + yfunc(d))))
+                .end();
 
     svg.select('.x-axis')
         .selectAll('text')
@@ -293,10 +300,11 @@ var stackedbar = (data, title = '', columngroups = [], stackgroups = [], heightk
     var sortedcolors = stackgroups.sort((a,b) => a - b);
     labels(xkey, heightkey, title);
     colorlegend(stackgroups.map((c,i) => color(i)), sortedcolors[0], sortedcolors[sortedcolors.length - 1], colortitle);
+    await bars;
     annotate(annotations);
 }
 
-var stackedcolumn100 = (data, title = '', columngroups = [], stackgroups = [], yname = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['yellow', 'brown'], heightfunc = (data, column, group) => 0, columnfunc = (row, column) => false, groupfunc = (row, group) => false, columnsortfunc = (data, column, group) => 0, annotations = []) => {
+var stackedcolumn100 = async (data, title = '', columngroups = [], stackgroups = [], yname = '', xkey = '', ymin = 0, ymax, colortitle = '', colorrange = ['yellow', 'brown'], heightfunc = (data, column, group) => 0, columnfunc = (row, column) => false, groupfunc = (row, group) => false, columnsortfunc = (data, column, group) => 0, annotations = []) => {
     var svg = getSvg();
 
     stackgroups = stackgroups.sort((a,b) => a - b);
@@ -371,7 +379,10 @@ var stackedcolumn100 = (data, title = '', columngroups = [], stackgroups = [], y
     var stackGen = d3.stack().keys(groups);
     var series = stackGen(chartData);
 
-    svg.append('g')
+    var transitions = 0;
+    var onEnd = () => annotate(annotations);
+
+    var bars = svg.append('g')
         .selectAll('g')
         .data(series)
         .enter()
@@ -391,10 +402,11 @@ var stackedcolumn100 = (data, title = '', columngroups = [], stackgroups = [], y
             .attr('opacity', 0)
             .attr('width', x.bandwidth())
             .transition()
-                 .delay((d, i) => 75 * i + (y(d[0]) - y(d[1])) * .1)
-                 .attr('opacity', 1)
-                 .attr('y', (d) => y(d[1]))
-                 .attr('height', (d, i) => (y(d[0]) - y(d[1])));
+                .delay((d, i) => 75 * i + (y(d[0]) - y(d[1])) * .1)
+                .attr('opacity', 1)
+                .attr('y', (d) => y(d[1]))
+                .attr('height', (d, i) => (y(d[0]) - y(d[1])))
+                .end();
 
     svg.select('.x-axis')
         .selectAll('text')
@@ -404,5 +416,7 @@ var stackedcolumn100 = (data, title = '', columngroups = [], stackgroups = [], y
     var sortedcolors = stackgroups.sort((a,b) => a - b);
     labels(xkey, yname, title);
     colorlegend(stackgroups.map((c,i) => color(i)), sortedcolors[0], sortedcolors[sortedcolors.length - 1], colortitle);
+    await bars;
     annotate(annotations);
 }
+

@@ -5,17 +5,28 @@ const annotationType = {
 };
 
 var annotate = (annotations = []) => {
-    if (annotations != null && annotations.length > 0)
+    if (annotations == null || annotations.length == 0)
+        return;
+
+    
+
+    annotations.forEach(annotation => {
+        var props = annotation;
+        if (annotation.location != null) {
+            props = annotation.location(props);
+        }
+
         d3.select('svg')
             .append('g')
             .attr('opacity', 0)
-            .attr('class', 'annotation-group ' + annotations[0].note.class)
+            .attr('class', 'chart-annotation annotation-group ' + props.note.class)
             .call(d3.annotation()
                 .editMode(false)
                 .notePadding(15)
-                .type(annotations[0].type)
-                .annotations(annotations))
+                .type(props.type)
+                .annotations([props]))
             .transition()
-            .delay(annotations[0].delay)
+            .delay(150)
                 .attr('opacity', 1);
+    });    
 }

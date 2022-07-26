@@ -89,10 +89,24 @@ var steps = [
         content: {
             annotations: (data) => [
                 {
+                    location: (props) => {
+                        var titles = [
+                            'Jurassic World',
+                        ];   
+                        var circle = Array.from(document.querySelectorAll('circle')).find(c => titles.includes(c.__data__['Title']));
+                        var positions = [{ height: circle.r.baseVal.value * 2, width: circle.r.baseVal.value * 2, x: circle.cx.baseVal.value, y: circle.cy.baseVal.value, r: circle.r.baseVal.value }];
+                        props.x = positions.map(m => m.x).sort((a, b) => a - b)[0] + margin.left;
+                        props.y = positions.map(m => m.y).sort((a, b) => a - b)[0] + margin.top;
+                        props.subject.radius = positions.map(m => m.width).reduce((a, b) => a + b) / 2 + 10;
+                        props.subject.radiusPadding = 0;
+                        props.dx = (props.dx * 2.5 * width() / 1920) + 50;
+                        props.dy = props.dy * height() / 1080;
+                        return props;
+                    },
                     delay: 2200,
                     type: annotationType.circle,
                     note: { 
-                        label: '5 of the top 7 most popular movies from 1960 to 2015 had a budget between 130 and 160 million USD.',
+                        label: 'Despite this popularity, only one of these top 7 exceeded $1 billion in revenue.',
                         class: 'vis1' 
                     },
                     x: 400,
@@ -106,9 +120,30 @@ var steps = [
                     data: data.filter(d => Number(d['Popularity']) > 12)
                 },
                 {
+                    location: (props) => {
+                        var titles = [
+                            'Mad Max: Fury Road',
+                            'Interstellar',
+                            'Guardians of the Galaxy',
+                            'Captain America: The Winter Soldier'
+                        ];   
+                        var circles = Array.from(document.querySelectorAll('circle')).filter(c => titles.includes(c.__data__['Title']));
+                        var positions = circles.map(circle => { return { height: circle.r.baseVal.value * 2, width: circle.r.baseVal.value * 2, x: circle.cx.baseVal.value, y: circle.cy.baseVal.value, r: circle.r.baseVal.value } });
+                        
+                        props.x = positions.map(m => m.x).reduce((a, b) => a + b) / positions.length + margin.left - 10;
+                        props.y = positions.map(m => m.y).reduce((a, b) => a + b) / positions.length + margin.top + 10;
+                        props.subject.radius = (positions.map(m => m.x + (m.r * 2)).sort((a, b) => b - a)[0] - positions.map(m => m.x - m.r).sort((a, b) => a - b)[0]) / 2 + 15; // - positions.map(m => m.x - m.r).sort((a, b) => a - b); // positions.map(m => m.width).reduce((a, b) => a + b) / 2;
+                        props.subject.radiusPadding = 0;
+                        props.dx = (props.dx * width() / 1920);
+                        props.dy = props.dy * height() / 1080 - 125;
+                        return props;
+                    },
                     delay: 2200,
                     type: annotationType.circle,
-                    note: { label: '' },
+                    note: { 
+                        label: '5 of the top 7 most popular movies from 1960 to 2015 had a budget between 130 and 160 million USD.',
+                        class: 'vis1' 
+                    },
                     x: 410,
                     y: 360,
                     dx: 300,
@@ -156,6 +191,23 @@ var steps = [
         content: {
             annotations: (data) => [
                 {
+                    location: (props) => {                       
+                        var g = Array.from(document.querySelectorAll('svg#chart > g:not(.annotation-group) > g:last-of-type > g')).slice(-6);
+                        var rects = g.map(x => Array.from(x.querySelectorAll('rect')).map(m => { return { height: m.height.baseVal.value, width: m.width.baseVal.value, y: m.y.baseVal.value, x: m.x.baseVal.value } }));
+                        var positions = rects.map(k => { return { height: k.map(x => x.height).reduce((a, b) => Number(a) + Number(b)), width: k[0].width, ymin: Math.min(...(k.map(x => x.y))), ymax: Math.max(...(k.map(x => x.y))), x: Math.min(...(k.map(x => x.x))) } });
+	                    var sorted = positions.sort((a, b) => a.x - b.x);
+                        var gap = sorted[1].x - sorted[0].x - sorted[0].width;
+
+                        props.x = positions.map(m => m.x).sort((a, b) => a - b)[0] + margin.left - gap / 2;
+                        props.y = positions.map(m => m.ymin).sort((a, b) => a - b)[0] + margin.top - gap / 2;
+                        props.subject.width = positions.map(m => m.width).reduce((a, b) => a + b) + gap * positions.length;
+                        props.subject.height = (positions.map(m => m.height).sort((a, b) => b - a)[0] + gap * 2) + margin.top;
+                        props.dx = -(props.dx * 3 * width() / 1920);
+                        props.dy = props.dy * 3 * height() / 1080;
+
+                        return props;
+                    },
+
                     delay: 1000,
                     type: annotationType.rectangle,
                     note: { 
@@ -214,6 +266,23 @@ var steps = [
         content: {
             annotations: (data) => [
                 {
+                    location: (props) => {                       
+                        var g = document.querySelectorAll('svg#chart > g:not(.annotation-group) > g:last-of-type > g:last-of-type')[0];
+	                    var rects = Array.from(g.querySelectorAll('rect')).filter(r => ['Western','History','Music','War'].find(f => f == r.__data__.data['column']) != null);
+                        var positions = rects.map(m => { return {height: m.height.baseVal.value, width: m.width.baseVal.value, y: m.y.baseVal.value, x: m.x.baseVal.value } });
+                        var sorted = positions.sort((a, b) => a.x - b.x);
+                        var gap = sorted[1].x - sorted[0].x - sorted[0].width;
+
+                        props.x = positions.map(m => m.x).sort((a, b) => a - b)[0] + margin.left - gap / 2;
+                        props.y = positions.map(m => m.y).sort((a, b) => b - a)[0] + margin.top - gap / 2;
+                        props.subject.width = positions.map(m => m.width).reduce((a, b) => a + b) + gap * positions.length;
+                        props.subject.height = positions.map(m => m.height).sort((a, b) => b - a)[0] + gap * 2;
+                        props.dx = props.dx * 3 * width() / 1920;
+                        props.dy = props.dy * 3 * height() / 1080;
+
+                        return props;
+                    },
+
                     delay: 1000,
                     type: annotationType.rectangle,
                     note: { 
@@ -477,9 +546,22 @@ var setup = () => {
         });
     });
 
-    changeStep(3);
+    changeStep(1);
 }
 
 setup();
 
-window.addEventListener('resize', () => changeStep(0));
+window.addEventListener('resize', () => {
+    var chart = document.getElementById('chart');
+    var height = chart.height.baseVal.value;
+    var width = chart.width.baseVal.value;
+    
+    // var containerWidth = (1920 * (document.querySelector('#vis').offsetWidth / 1920) - margin.left - margin.right);
+    // var containerHeight = (1920 * (document.querySelector('#vis').offsetWidth / 1920) / 1920 * 1080 - margin.top - margin.bottom);
+
+    var containerWidth = document.getElementById('vis').offsetWidth;
+    var containerHeight = document.getElementById('vis').offsetHeight;
+    chart.style.transform = 'scale(' + (1 + (1 - width / containerWidth)) + ')';
+    chart.style.marginLeft = ((containerWidth - width) / 2);
+    chart.style.marginTop = ((containerHeight - height) / 2);
+});
