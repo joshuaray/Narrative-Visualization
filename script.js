@@ -59,7 +59,7 @@ var steps = [
     },
     {
         name: 'Step 1',
-        description: 'This scatterplot displays monetary and popularity statistics of box office releases between 1960 and 2015, including inflation adjusted revenue and budget USD values. <b>Annotations</b> have been added that point out interesting insights of the data. For example, <b>5 of the top 10</b> movies by popularity index between 1960 and 2015 had an inflation adjusted budget between $150 and $170 million.',
+        description: 'This scatterplot displays monetary and popularity statistics of box office releases between 1960 and 2015, including inflation adjusted revenue and budget USD values. <b>Annotations</b> have been added that point out interesting insights of the data. For example, <b>5 of the top 7</b> movies by popularity index between 1960 and 2015 had an inflation adjusted budget between $130 and $160 million.',
         properties: [
             {
                 name: 'X Axis',
