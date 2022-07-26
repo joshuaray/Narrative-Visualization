@@ -4,7 +4,7 @@ var font = "'Noto Sans', sans-serif";
 
 var width = () => 1920 * (document.querySelector(container).offsetWidth / 1920) - margin.left - margin.right;
 var height = () => 1920 * (document.querySelector(container).offsetWidth / 1920) / 1920 * 1080 - margin.top - margin.bottom;
-var margin = {left: 150, right: 100, top: 50, bottom: 100};
+var margin = {left: 150, right: 100, top: 50, bottom: 135};
 
 var startingOpacity = 0.0;
 var animationDelay = 200;
@@ -29,7 +29,6 @@ var getSvg = () => {
             .attr('id', 'chart')
             .attr('width', width() + margin.left + margin.right)
             .attr('height', height() + margin.top + margin.bottom)
-            .style('margin-top', (window.innerHeight - height() - margin.top - margin.bottom) / 4)
         .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -46,26 +45,26 @@ var labels = (x, y, title) => {
         .attr('dy', '12px')
         .attr('transform', 'rotate(-90)')
         .text(y)
-        .style('font-size', '.8em')
+        .style('font-size', '.8vw')
         .attr('opacity', startingOpacity)
         .transition()
             .delay(animationDelay)
             .attr('opacity', 1)
-            .style('font-size', '1em');
+            .style('font-size', '1vw');
     
     svg.append('text')
         .attr('class', 'axis-label')
         .attr('text-anchor', 'middle')
-        .attr('y', height() + margin.bottom)
+        .attr('y', height() + (margin.bottom - 25))
         .attr('x', width() / 2 + margin.left)
         .attr('dy', '18px')
         .text(x)
-        .style('font-size', '.8em')
+        .style('font-size', '.8vw')
         .attr('opacity', startingOpacity)
         .transition()
             .delay(animationDelay)
             .attr('opacity', 1)
-            .style('font-size', '1em');
+            .style('font-size', '1vw');
 
     svg.append('text')
         .attr('class', 'title')
@@ -74,7 +73,7 @@ var labels = (x, y, title) => {
         .attr('y', 15)
         .attr('x', width() / 2 + margin.left)
         .attr('dy', '12px')
-        .style('font-size', '1em')
+        .style('font-size', '1vw')
         .style('font-weight', 'bold')
         .text(title)
         .attr('opacity', 0)

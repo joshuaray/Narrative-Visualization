@@ -99,7 +99,7 @@ var steps = [
                         props.y = positions.map(m => m.y).sort((a, b) => a - b)[0] + margin.top;
                         props.subject.radius = positions.map(m => m.width).reduce((a, b) => a + b) / 2 + 10;
                         props.subject.radiusPadding = 0;
-                        props.dx = (props.dx * 2.5 * width() / 1920) + 50;
+                        props.dx = (props.dx * 2.5 * width() / 1920) + 20;
                         props.dy = props.dy * height() / 1080;
                         return props;
                     },
@@ -134,8 +134,8 @@ var steps = [
                         props.y = positions.map(m => m.y).reduce((a, b) => a + b) / positions.length + margin.top + 10;
                         props.subject.radius = (positions.map(m => m.x + (m.r * 2)).sort((a, b) => b - a)[0] - positions.map(m => m.x - m.r).sort((a, b) => a - b)[0]) / 2 + 15; // - positions.map(m => m.x - m.r).sort((a, b) => a - b); // positions.map(m => m.width).reduce((a, b) => a + b) / 2;
                         props.subject.radiusPadding = 0;
-                        props.dx = (props.dx * width() / 1920);
-                        props.dy = props.dy * height() / 1080 - 125;
+                        props.dx = (props.dx * width() / 1920) + 120;
+                        props.dy = props.dy * height() / 1080 + 25; // - 125;
                         return props;
                     },
                     delay: 2200,
@@ -555,13 +555,13 @@ window.addEventListener('resize', () => {
     var chart = document.getElementById('chart');
     var height = chart.height.baseVal.value;
     var width = chart.width.baseVal.value;
-    
-    // var containerWidth = (1920 * (document.querySelector('#vis').offsetWidth / 1920) - margin.left - margin.right);
-    // var containerHeight = (1920 * (document.querySelector('#vis').offsetWidth / 1920) / 1920 * 1080 - margin.top - margin.bottom);
-
     var containerWidth = document.getElementById('vis').offsetWidth;
     var containerHeight = document.getElementById('vis').offsetHeight;
+    if (containerWidth < 500)
+        return;
+    console.log(containerWidth);
     chart.style.transform = 'scale(' + (1 + (1 - width / containerWidth)) + ')';
+    console.log(chart.style.transform);
     chart.style.marginLeft = ((containerWidth - width) / 2);
     chart.style.marginTop = ((containerHeight - height) / 2);
 });
