@@ -196,8 +196,8 @@ button {
         }
 
         .step-active > .point {
-            background: rgb(37,163,110);
-            box-shadow: 0px 0px 10px 0px rgb(37 163 110 / 70%);
+            background: orange;
+            box-shadow: 0px 0px 10px 0px rgba(252, 219, 37, 1);
             transition: all .3s ease;
             width: 25px;
         }
