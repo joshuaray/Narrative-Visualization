@@ -498,9 +498,8 @@ var changeStep = async (modifier) => {
     var next = document.getElementsByClassName('step')[currentStep];
     next.classList.add('step-active');
 
-    //if (currentStep != 0 && currentStep != steps.length - 1)
-        if (document.getElementsByClassName('overlay').length > 0)
-            document.getElementsByClassName('overlay')[0].classList.remove('overlay');
+    if (document.getElementsByClassName('overlay').length > 0)
+        document.getElementsByClassName('overlay')[0].classList.remove('overlay');
 
     changeProperties(steps[currentStep].description, steps[currentStep].properties);
     await generate(steps[currentStep]);

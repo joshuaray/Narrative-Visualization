@@ -60,12 +60,9 @@ sliderInput = (min = '', max = '', classs = '', value = '', id = '') => {
 
 labelInput = (min, max, label, id, value) => {
     var container = document.createElement('div');
-    //container.classList.add('form_control_container');
     var element = document.createElement('div');
-    //element.classList.add('form_control_container__time');
     element.innerText = label;
     var input = document.createElement('input');
-    //input.classList.add('form_control_container__time__input');
     input.id = id;
     input.value = value;
     input.min = min;

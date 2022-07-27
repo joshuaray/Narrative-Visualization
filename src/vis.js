@@ -211,10 +211,7 @@ var scatterplot = async (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey 
                               '<p>' + i['Release Date'] + '</p>')
                 }
             })
-            .on('mouseleave', (d, i) => {
-                //d3.select('#tooltip').classed('inactive')
-                document.getElementById('tooltip').classList.add('inactive');
-            })
+            .on('mouseleave', (d, i) => document.getElementById('tooltip').classList.add('inactive'))
             .transition()
                 .delay((d, i) => 250 + 30 * d[radiusKey])
                 .style('opacity', 1)
@@ -307,15 +304,6 @@ var stackedbar = async (data, title = '', columngroups = [], stackgroups = [], h
             .attr('opacity', 0)
             .attr('width', x.bandwidth())
             .attr('height', (d) => (y(yfunc(d)) - (y(d.value + yfunc(d)))) * 2)
-            // .on('mouseover', (d, i) => {
-            //     d3.select('#tooltip').style('opacity', 1)
-            //         .style('left', d.x + 'px')
-            //         .style('top', d.y + 'px')
-            //         .html('Item # ' + i + ' is ' + d)
-            // })
-            // .on('mouseleave', (d, i) => {
-            //     d3.select('#tooltip').style('opacity', 0)
-            // })
             .transition()
                 .delay((d, i) => 150 * i + (stackgroups.length - d.groupindex) * 20)
                 .attr('opacity', 1)
@@ -409,9 +397,6 @@ var stackedcolumn100 = async (data, title = '', columngroups = [], stackgroups =
 
     var stackGen = d3.stack().keys(groups);
     var series = stackGen(chartData);
-
-    var transitions = 0;
-    var onEnd = () => annotate(annotations);
 
     var bars = svg.append('g')
         .selectAll('g')
