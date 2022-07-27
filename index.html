@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <head>
-    <script src="./src/d3.js"></script>
-    <script src="./src/d3-annotation.js"></script>
-    <script src="./src/annotate.js"></script>
-    <script src="./src/vis.js"></script>
-    <script src="./src/filter.js"></script>
-    <script src="./src/filter/slider.js"></script>
-    <script src="./src/filter/stringList.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://github.com/joshuaray/Narrative-Visualization/blob/main/data/data.csv?raw=true" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css" />
+    <script type='text/javascript'>
+        guid = () => ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
+        var sources = [
+            './src/d3.js', 
+            './src/d3-annotation.js', 
+            './src/vis.js', 
+            './src/filter.js', 
+            './src/filter/slider.js', 
+            './src/filter/stringList.js'
+        ];
+        sources.forEach(source => {
+            var src = '<script type="text/javascript" src="' + source + '?' + guid() + '"' + '>' + '<' + '/script>';
+            document.write(src);
+        });
+        document.write('<link rel="stylesheet" href="./style.css' + '?' + guid() + '"');
+    </script>
 </head>
 <body>
     <div id="tooltip" class="inactive"></div>
@@ -76,6 +83,9 @@
         <p>UIUC | CS498 - Data Visualization</p>
         <p>Joshua Ray</p>
     </div>
-    <script src="./script.js"></script>
+    <script type='text/javascript'>
+        guid = () => ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
+        document.write('<script type="text/javascript" src="' + './script.js' + '?' + guid() + '"' + '>' + '<' + '/script>');
+    </script>
 </body>
 </html>
