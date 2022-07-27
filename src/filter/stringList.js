@@ -141,7 +141,7 @@ stringList = (chart, data, id, container, name = '', initialValues = [], values 
             showStringListModal(
                 id, 
                 name, 
-                Array.from(document.querySelectorAll('.string-list-item-name_genre')).map(g => g.innerText),
+                Array.from(document.querySelectorAll('.string-list-item-name_' + id)).map(g => g.innerText),
                 values(data),
                 onChange
             );

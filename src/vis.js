@@ -159,7 +159,7 @@ var colorlegend = (colors = [], min, max, title) => {
             .attr('opacity', 1);
 }
 
-var scatterplot = async (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', ykey = '', radiusKey = '', colortitle = '', colorrange = ['white','blue'], colorbuckets = [], colorfunc = (x) => 0, annotations = []) => {
+var scatterplot = async (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey = '', ykey = '', radiusKey = '', colortitle = '', colorrange = ['white','blue'], colorbuckets = [], colorfunc = (x) => 0, annotations = [], tooltips = false) => {
     var svg = getSvg();
     xmax = xmax * 1.05;
     ymax = ymax * 1.05;
@@ -199,6 +199,22 @@ var scatterplot = async (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey 
             .style('stroke-width', 1)
             .style('opacity', 0.1)
             .style('fill', (d) => color(colorfunc(d)))
+            .on('mouseover', (d, i) => {
+                if (tooltips) {
+                    document.getElementById('tooltip').classList.remove('inactive');
+                    d3.select('#tooltip')
+                        .style('left', d.x + 15 + 'px') //(d.x > width() ? (d.x - 120) : (d.x + 20)) + 'px')
+                        .style('top', (d.y > height() - 100 ? (d.y - 110) : (d.y + 20)) + 'px')
+                        .html('<p><b>' + i['Title'] + '</b></p>' + 
+                              '<p>' + i['Production Company'] + '</p>' +
+                              '<p>' + i['Director']  + '</p>' + 
+                              '<p>' + i['Release Date'] + '</p>')
+                }
+            })
+            .on('mouseleave', (d, i) => {
+                //d3.select('#tooltip').classed('inactive')
+                document.getElementById('tooltip').classList.add('inactive');
+            })
             .transition()
                 .delay((d, i) => 250 + 30 * d[radiusKey])
                 .style('opacity', 1)
@@ -291,6 +307,15 @@ var stackedbar = async (data, title = '', columngroups = [], stackgroups = [], h
             .attr('opacity', 0)
             .attr('width', x.bandwidth())
             .attr('height', (d) => (y(yfunc(d)) - (y(d.value + yfunc(d)))) * 2)
+            // .on('mouseover', (d, i) => {
+            //     d3.select('#tooltip').style('opacity', 1)
+            //         .style('left', d.x + 'px')
+            //         .style('top', d.y + 'px')
+            //         .html('Item # ' + i + ' is ' + d)
+            // })
+            // .on('mouseleave', (d, i) => {
+            //     d3.select('#tooltip').style('opacity', 0)
+            // })
             .transition()
                 .delay((d, i) => 150 * i + (stackgroups.length - d.groupindex) * 20)
                 .attr('opacity', 1)

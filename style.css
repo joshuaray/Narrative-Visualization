@@ -627,6 +627,41 @@ text.annotation-note-label {
             flex-direction: row-reverse;
         }
 
+#tooltip {
+    position: absolute;
+    background: white;
+    opacity: 1;
+    transition: all .2s ease-in-out;
+    cursor: initial;
+    user-select: none;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
+    border-radius: 5px;
+    padding: 5px;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
+    float: right;
+    padding-left: 10px;
+    padding-right: 10px;
+    z-index: 999999999;
+    background: linear-gradient(rgb(255,255,255), rgb(240,240,240));
+}
+    #tooltip.inactive {
+        transform: scale(0.5, 0.1);
+        opacity: 0;
+        transition: opacity .2s ease-in-out, transform .8s ease;
+    }
+
+    #tooltip > p {
+        padding: 0;
+        margin: 0;
+        font-size: 1vw;
+    }
+
+
+
 
 .range_container {
     display: flex;
