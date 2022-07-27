@@ -1,4 +1,4 @@
-var datasource = 'https://github.com/joshuaray/Narrative-Visualization/blob/90448162aa75948454f93c8dfdb1d9655cac3fe6/data/data.csv?raw=true'; //'../data/data.csv';
+var datasource = 'https://joshuaray.github.io/Narrative-Visualization/data/data.csv?raw=true'; //'../data/data.csv';
 var container = 'div#vis';
 var font = "'Noto Sans', sans-serif";
 
