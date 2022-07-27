@@ -19,8 +19,9 @@ var destroy = () => {
     d3.select('.chart-annotation').remove();
 }
 
-var getSvg = () => {
-    destroy();
+var getSvg = (remove = true) => {
+    if (remove)
+        destroy();
 
     var svg = d3.select(container)
         .append('svg')
@@ -179,6 +180,12 @@ var scatterplot = async (data, title = '', xmin = 0, xmax, ymin = 0, ymax, xkey 
         .call(d3.axisLeft(y))
         .call(g => g.selectAll('.tick').attr('opacity', 0).transition().delay((d, i) => 200 + i * 100).attr('opacity', 1))
         .call(g => g.selectAll('path.domain').attr('stroke-opacity', 0).transition().delay(500).attr('stroke-opacity', 1));
+
+    svg.append('g')
+        .selectAll('dot')
+        .data(data)
+        .exit()
+        .remove();
 
     var dots = svg.append('g')
         .selectAll('dot')

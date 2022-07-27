@@ -167,7 +167,7 @@ var steps = [
     },
     {
         name: 'Step 2',
-        description: 'TODO',
+        description: 'This stacked column chart displays total inflation adjusted USD revenue of box office releases between 1960 and 2015, and breaks those down by genre. An <b>annotation</b> has been added that point out interesting insights of the data. For example, <b>the bottom 6</b> genres by total revenue between 1960 and 2015 were <b>Music, War, History, Western, Documentary, Foreign</b>',
         properties: [
             {
                 name: 'X Axis',
@@ -242,7 +242,7 @@ var steps = [
     },
     {
         name: 'Step 3',
-        description: 'TODO',
+        description: 'This 100% stacked column chart displays inflation adjusted revenue breakdown of genres by decade. By  doing this, we see interesting trends in the data that suggest genres that have decreased in popularity over time, seen resurgences after decades of low revenue, or became popular more recently. For example, an <b>annotations</b> has been added that shows the <b>Western, History, Music, and War</b> genres each saw significant portions of their total revenue from movies released in the 1960s-1970s, suggesting they have become less popular over time.',
         properties: [
             {
                 name: 'X Axis',
