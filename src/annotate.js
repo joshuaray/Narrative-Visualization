@@ -8,13 +8,10 @@ var annotate = (annotations = []) => {
     if (annotations == null || annotations.length == 0)
         return;
 
-    
-
     annotations.forEach(annotation => {
         var props = annotation;
-        if (annotation.location != null) {
+        if (annotation.location != null)
             props = annotation.location(props);
-        }
 
         d3.select('svg')
             .append('g')

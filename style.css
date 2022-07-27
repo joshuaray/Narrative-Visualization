@@ -660,97 +660,87 @@ text.annotation-note-label {
         font-size: 1vw;
     }
 
+filter input[readonly] {
+    background: transparent;
+    border: none;
+    color: white;
+    width: 100%;
+    user-select: none;
+}
 
+.slider-controls {
+    position: relative;
+    min-height: 20px;
+}
+    .slider-controls > input:first-of-type {
+        z-index: 1;
+        height: 0;
+    }
 
-
-.range_container {
+.slider-container {
     display: flex;
     flex-direction: column;
     width: 80%;
     margin: 35% auto;
     margin-top: 20px;
     margin-bottom: 20px;
-  }
-  
-  .sliders_control {
-    position: relative;
-    min-height: 20px;
-  }
-  
-  .form_control {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    color: white;
-  }
-  
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    pointer-events: all;
-    width: 24px;
-    height: 24px;
-    background-color: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 0 1px #C6C6C6;
-    cursor: pointer;
-  }
-  
-  input[type=range]::-moz-range-thumb {
-    -webkit-appearance: none;
-    pointer-events: all;
-    width: 24px;
-    height: 24px;
-    background-color: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 0 1px #C6C6C6;
-    cursor: pointer;  
-  }
-  
-  input[type=range]::-webkit-slider-thumb:hover {
-    background: #f7f7f7;
-  }
-  
-  input[type=range]::-webkit-slider-thumb:active {
-    box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
-    -webkit-box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
-  }
-  
-  .form_control_container > input {
-    background: transparent;
-    border: none;
-    color: white;
-    width: 100%;
-    user-select: none;
-  }
+}
 
-  .form_control > .form_control_container:first-of-type > input,
-  .form_control > .form_control_container:first-of-type > div {
-    user-select: none;
-    text-align: left;
-  }
-  .form_control > .form_control_container:last-of-type > input,
-  .form_control > .form_control_container:last-of-type > div {
-    user-select: none;
-    text-align: right;
-  }
+    input[type='range'] {
+        -webkit-appearance: none; 
+        appearance: none;
+        height: 3px;
+        width: 100%;
+        position: absolute;
+        background-color: orange;
+        pointer-events: none;
+        border-radius: 10px;
+    }
+    
+    input[type=range]::-webkit-slider-thumb {
+        width: 18px;
+        height: 18px;
+        background-color: white;
+        border-radius: 100%;
+        box-shadow: 0 0 0 2px #C7C7C7;
+        cursor: pointer;
+        transition: all .3s ease;
+        pointer-events: all;
+        -webkit-appearance: none;
+    }
+    
+    input[type=range]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background-color: white;
+        border-radius: 100%;
+        box-shadow: 0 0 0 2px #C7C7C7;
+        cursor: pointer;  
+        transition: all .3s ease;
+        pointer-events: all;
+        -webkit-appearance: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb:active {
+        transition: all .3s ease;
+        box-shadow: inset 0 0 4px #2d82d8, 0 0 6px #4e8fcf;
+        -webkit-box-shadow: inset 0 0 4px #2d82d8, 0 0 6px #4e8fcf;
+    }
   
-  input[type=number]::-webkit-inner-spin-button, 
-  input[type=number]::-webkit-outer-spin-button {  
-     opacity: 1;
-  }
-  
-  input[type="range"] {
-    -webkit-appearance: none; 
-    appearance: none;
-    height: 2px;
-    width: 100%;
-    position: absolute;
-    background-color: #C6C6C6;
-    pointer-events: none;
-  }
-  
-  .sliders_control > input:first-of-type {
-    height: 0;
-    z-index: 1;
-  }
+    .slider-input-container {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: white;
+    }
+
+        .slider-input-container > div:first-of-type > * {
+            user-select: none;
+            text-align: left;
+        }
+
+        .slider-input-container > div:last-of-type > * {
+            user-select: none;
+            text-align: right;
+        }

@@ -40,7 +40,6 @@ showStringListModal = (id = '', title = '', currentSelection = [], allValues = [
     header.appendChild(searchContainer);
 
     searchInput.oninput = (e) => {
-        console.log(e);
         var elements = document.querySelectorAll('items-container > .string-list-item:not(.selected)');
         Array.from(elements).forEach(a => {
             if (a.textContent.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase()))
