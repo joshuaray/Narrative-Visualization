@@ -494,7 +494,9 @@ h3.filter-name {
 
 
 .modal {
-    padding: 50px;
+    padding: 5%;
+    padding-left: 10%;
+    padding-right: 10%;
     transition: all .3s ease;
     z-index: 9999999999;
     left: 0;
