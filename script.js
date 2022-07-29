@@ -162,7 +162,7 @@ var steps = [
             color: (row) => row['Release Year'].substring(0,3) + '0',
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
-            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['blue', 'orange'], self.colorbuckets(data), self.color, self.annotations(self.data(self, data)))
+            func: (self, data) => scatterplot(self.data(self, data), self.title(data), 0, max(data, self.x), 0, max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['orange', 'blue'], self.colorbuckets(data), self.color, self.annotations(self.data(self, data)))
         }
     },
     {
