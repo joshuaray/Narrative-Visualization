@@ -407,7 +407,7 @@ var steps = [
             color: (row) => row['Release Year'].substring(0,3) + '0',
             colorbuckets: (data) => data.map(d => Number(d['Release Year'].substring(0,3) + '0')).sort().filter((v, i, a) => a.indexOf(v) == i),
             data: (self, data) => data.filter(d => Number(d[self.x]) > 0 && Number(d[self.y] > 0)),
-            prompt: 'scenes are done, you can now filter the data as you desire to learn additional insights.',
+            prompt: 'The message delivering portion of this Martini Glass narrative visualization has now completed, and you may now explore the data on your own to learn additional insights. Utilize the filters on the right to manipulate the data being displayed, and hover over chart elements for on-demand details.',
             func: (self, data) => scatterplot(self.data(self, data), self.title(data), min(data, self.x), max(data, self.x), min(data, self.y), max(data, self.y), self.x, self.y, self.size, 'Release Decade', ['blue', 'orange'], self.colorbuckets(data), self.color, self.annotations(self.data(self, data)), true)
         }
     }
