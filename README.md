@@ -7,6 +7,6 @@
 <img alt="D3.js" src="https://img.shields.io/badge/D3.js-F9A03C.svg?logo=d3.js&logoColor=white">
 </p>
 
-Using decades of aggregate movie release, review, and sales data to find and visualize trends in pure HTML5, CSS, and D3.js. Browse a deployed version at [Netlify](https://637d6a06a3fe9c5f6154b6ea--melodic-mousse-efc41a.netlify.app/).
+Using decades of aggregate movie release, review, and sales data to find and visualize trends in pure HTML5, CSS, and D3.js. Browse a deployed version at [Netlify](https://637d6a06a3fe9c5f6154b6ea--melodic-mousse-efc41a.netlify.app/) or [GitHub Pages](https://joshuaray.github.io/Narrative-Visualization/).
 
 Built for the University of Illinois-Urbana Champaign.
